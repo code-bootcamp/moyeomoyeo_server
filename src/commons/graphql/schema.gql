@@ -2,6 +2,87 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
+type Category {
+  id: String!
+  name: String!
+  posts: [Post!]!
+}
+
+type Payment {
+  id: String!
+  impUid: String!
+  transactAt: DateTime!
+  status: PAYMENT_STATUS!
+  payAmount: Int!
+  buyer: User!
+}
+
+"""
+A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
+"""
+scalar DateTime
+
+enum PAYMENT_STATUS {
+  PAYMENT
+  CANCELLATION
+}
+
+type Product {
+  id: String!
+  productCode: String!
+  name: String!
+  description: String!
+  price: Int!
+  viewCount: Int!
+  createdAt: DateTime!
+  isSoldout: Boolean!
+  imgSrc: String!
+  seller: User!
+  transaction: Payment!
+  likedUsers: [User!]!
+}
+
+type User {
+  id: String!
+  name: String!
+  password: String!
+  email: String!
+  phone: String!
+  point: Int!
+  createdAt: String!
+  isSubscribed: Boolean!
+  isAdmin: Boolean!
+  institution: String!
+  manager: String!
+  dibsProducts: [Product!]!
+  dibsEvent: [Event!]!
+}
+
+type Post {
+  id: String!
+  title: String!
+  writer: User!
+  fileSrc: String!
+  headerImgSrc: String!
+  hashtags: String!
+  uploadedAt: DateTime!
+  editedAt: DateTime!
+  viewCount: Int!
+  categories: [Category!]!
+}
+
+type Event {
+  id: String!
+  name: String!
+  description: String!
+  date: DateTime!
+  areaCode: String!
+  imgSrc: String!
+  post: Post!
+  likedUsers: [User!]!
+}
+
 type Query {
   loadEvents: String!
+  fetchUsers: [User!]!
 }
