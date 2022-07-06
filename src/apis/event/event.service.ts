@@ -23,6 +23,7 @@ export class EventService {
           description: element.SUMMRY_SNTNC_CONT,
           date: element.EVENT_PERD.split(' ')[0],
           areaCode: element.INST_NM,
+          imgSrc: element.IMAGE_URL,
         });
       }),
     );
