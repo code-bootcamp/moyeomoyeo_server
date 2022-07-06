@@ -1,0 +1,6 @@
+{
+    //항상 vsCode 설정파일은 최상단에 위치
+    "editor.formatOnSave": true,
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  }
+  
