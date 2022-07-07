@@ -2,6 +2,67 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
+type BoardAddress {
+  id: String!
+  lat: Float!
+  lng: Float!
+  postal: String!
+  address_description: String!
+}
+
+type Board {
+  id: String!
+  title: String!
+  contents: String!
+  count: Float!
+  isFull: Boolean!
+  targetDate: String!
+  transport: String!
+  boardAddress: BoardAddress!
+}
+
 type Query {
   loadEvents: String!
 }
+
+type Mutation {
+  updateBoard(boardId: String!, updateBoardInput: UpdateBoardInput!): Board!
+  createBoard(createBoardInput: CreateBoardInput!): Board!
+  uploadFile(files: [Upload!]!): [String!]!
+}
+
+input UpdateBoardInput {
+  writer: String!
+  title: String!
+  contents: String!
+  count: Float!
+  isFull: Boolean!
+  targetDate: String!
+  transport: String!
+}
+
+input CreateBoardInput {
+  writer: String!
+  title: String!
+  contents: String!
+  count: Float!
+  isFull: Boolean!
+  targetDate: DateTime!
+  transport: String!
+  boardAddress: BoardAddressInput!
+}
+
+"""
+A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
+"""
+scalar DateTime
+
+input BoardAddressInput {
+  lat: Float!
+  lng: Float!
+  postal: String!
+  address_description: String!
+}
+
+"""The `Upload` scalar type represents a file upload."""
+scalar Upload
