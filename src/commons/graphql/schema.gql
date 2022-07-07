@@ -84,5 +84,30 @@ type Event {
 
 type Query {
   loadEvents: String!
+  fetchUser(email: String!): User!
   fetchUsers: [User!]!
+}
+
+type Mutation {
+  login(email: String!, password: String!): String!
+  createUser(userInput: UserInput!): User!
+  updateUser(updateUserInput: UpdateUserInput!): User!
+}
+
+input UserInput {
+  name: String!
+  password: String!
+  email: String!
+  phone: String!
+  institution: String
+  manager: String
+}
+
+input UpdateUserInput {
+  name: String
+  password: String
+  email: String
+  phone: String
+  institution: String
+  manager: String
 }
