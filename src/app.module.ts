@@ -4,9 +4,11 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { ApolloDriverConfig, ApolloDriver } from '@nestjs/apollo';
 import { EventModule } from './apis/event/event.module';
 import { UserModule } from './apis/user/user.module';
+import { AuthModule } from './apis/auth/auth.module';
 
 @Module({
   imports: [
+    AuthModule,
     EventModule,
     UserModule,
     GraphQLModule.forRoot<ApolloDriverConfig>({

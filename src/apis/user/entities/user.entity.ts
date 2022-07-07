@@ -3,6 +3,7 @@ import { Event } from 'src/apis/event/entities/event.entity';
 import { Product } from 'src/apis/product/entities/product.entity';
 import {
   Column,
+  CreateDateColumn,
   Entity,
   JoinTable,
   ManyToMany,
@@ -32,27 +33,27 @@ export class User {
   @Field(() => String)
   phone: string;
 
-  @Column()
+  @Column({ default: 0 })
   @Field(() => Int)
   point: number;
 
-  @Column()
+  @CreateDateColumn()
   @Field(() => String)
   createdAt: Date;
 
-  @Column()
+  @Column({ default: false })
   @Field(() => Boolean)
   isSubscribed: boolean;
 
-  @Column()
+  @Column({ default: false })
   @Field(() => Boolean)
   isAdmin: boolean;
 
-  @Column()
+  @Column({ nullable: true })
   @Field(() => String)
   institution: string;
 
-  @Column()
+  @Column({ nullable: true })
   @Field(() => String)
   manager: string;
 
