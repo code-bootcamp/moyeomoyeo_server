@@ -3,16 +3,10 @@ import { GraphQLModule } from '@nestjs/graphql';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ApolloDriverConfig, ApolloDriver } from '@nestjs/apollo';
 import { EventModule } from './apis/event/event.module';
-import { BoardModule } from './apis/boards/boards.module';
-import { BoardAddress } from './apis/address/entities/Board.address.entity';
-import { FileModule } from './apis/fileupload/file.module';
 
 @Module({
   imports: [
     EventModule,
-    BoardModule,
-    BoardAddress,
-    FileModule,
     GraphQLModule.forRoot<ApolloDriverConfig>({
       driver: ApolloDriver,
       autoSchemaFile: 'src/commons/graphql/schema.gql',
