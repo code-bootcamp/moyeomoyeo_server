@@ -30,7 +30,7 @@ export class User {
   @Field(() => String)
   email: string;
 
-  @Column()
+  @Column({ nullable: true })
   @Field(() => String)
   phone: string;
 

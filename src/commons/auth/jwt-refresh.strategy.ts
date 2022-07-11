@@ -1,33 +1,34 @@
 import { CACHE_MANAGER, Inject, UnauthorizedException } from '@nestjs/common';
 import { PassportStrategy } from '@nestjs/passport';
+import { Strategy } from 'passport-jwt';
 import { Cache } from 'cache-manager';
-import { ExtractJwt, Strategy } from 'passport-jwt';
 
-export class JwtAccessStrategy extends PassportStrategy(
+export class JwtRefreshStrategy extends PassportStrategy(
   Strategy,
-  'loginGuard',
+  'refreshGuard',
 ) {
   constructor(
     @Inject(CACHE_MANAGER)
     private readonly cacheManager: Cache,
   ) {
     super({
-      jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
-      secretOrKey: 'accessKey',
+      jwtFromRequest: (req) => {
+        const cookie = req.headers.cookie;
+        const refreshToken = cookie.replace('refreshToken=', '');
+        return refreshToken;
+      },
+      secretOrKey: 'refreshKey',
       passReqToCallback: true,
     });
   }
 
   async validate(req: any, payload: any) {
-    const accessToken = req.headers.authorization.split(' ')[1];
-    const tokenFound = await this.cacheManager.get(
-      `accessToken=${accessToken}`,
-    );
+    const refreshToken = req.headers.cookie.replace('refreshToken=', '');
+    const tokenFound = this.cacheManager.get(`refreshToken=${refreshToken}`);
     if (tokenFound)
       throw new UnauthorizedException(
         'Error 401: 로그아웃된 유저입니다. 다시 로그인해주세요.',
       );
-
     return {
       email: payload.email,
       id: payload.sub,

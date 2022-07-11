@@ -5,9 +5,13 @@ import { User } from '../user/entities/user.entity';
 import { AuthResolver } from './auth.resolver';
 import { AuthService } from './auth.service';
 import { UserService } from '../user/user.service';
+import { AuthController } from './auth.controller';
+import { JwtGoogleStrategy } from 'src/commons/auth/jwt-social.google.strategy';
+import { JwtRefreshStrategy } from 'src/commons/auth/jwt-refresh.strategy';
 
 @Module({
   imports: [TypeOrmModule.forFeature([User]), JwtModule.register({})],
-  providers: [AuthResolver, AuthService, UserService],
+  providers: [AuthResolver, AuthService, UserService, JwtGoogleStrategy],
+  controllers: [AuthController],
 })
 export class AuthModule {}
