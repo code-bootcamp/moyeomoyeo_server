@@ -3,6 +3,8 @@
 /node_modules
 /src/commons/graphql/schema.gql
 .env*
+/src/apis/fileupload/gcp-file-storage.json
+/key/gcp-file-storage.json
 
 # Logs
 logs
