@@ -21,10 +21,6 @@ export class Product {
 
   @Column()
   @Field(() => String)
-  productCode: string;
-
-  @Column()
-  @Field(() => String)
   name: string;
 
   @Column()
@@ -32,10 +28,14 @@ export class Product {
   description: string;
 
   @Column()
+  @Field(() => String)
+  contentSrc: string;
+
+  @Column()
   @Field(() => Int)
   price: number;
 
-  @Column()
+  @Column({ default: 0 })
   @Field(() => Int)
   viewCount: number;
 

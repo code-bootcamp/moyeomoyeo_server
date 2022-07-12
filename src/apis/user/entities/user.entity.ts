@@ -1,4 +1,4 @@
-import { Field, Int, ObjectType } from '@nestjs/graphql';
+import { Field, ObjectType } from '@nestjs/graphql';
 import { Board } from 'src/apis/boards/entities/board.entity';
 import { Event } from 'src/apis/event/entities/event.entity';
 import { Product } from 'src/apis/product/entities/product.entity';
