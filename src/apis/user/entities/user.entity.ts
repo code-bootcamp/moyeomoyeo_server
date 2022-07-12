@@ -5,6 +5,7 @@ import { Product } from 'src/apis/product/entities/product.entity';
 import {
   Column,
   CreateDateColumn,
+  DeleteDateColumn,
   Entity,
   JoinTable,
   ManyToMany,
@@ -30,13 +31,17 @@ export class User {
   @Field(() => String)
   email: string;
 
-  @Column()
+  @Column({ nullable: true })
   @Field(() => String)
   phone: string;
 
   @CreateDateColumn()
   @Field(() => String)
   createdAt: Date;
+
+  @DeleteDateColumn()
+  @Field(() => Date)
+  deletedAt: Date;
 
   @Column({ default: false })
   @Field(() => Boolean)
