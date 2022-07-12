@@ -10,6 +10,8 @@ import { FileModule } from './apis/fileupload/file.module';
 import { BoardModule } from './apis/boards/boards.module';
 import { RedisClientOptions } from 'redis';
 import * as redisStore from 'cache-manager-redis-store';
+import { PhoneModule } from './apis/phone/phone.module';
+import { EmailModule } from './apis/email/email.module';
 
 @Module({
   imports: [
@@ -19,6 +21,8 @@ import * as redisStore from 'cache-manager-redis-store';
     FileModule,
     UserModule,
     AuthModule,
+    PhoneModule,
+    EmailModule,
 
     GraphQLModule.forRoot<ApolloDriverConfig>({
       driver: ApolloDriver,
