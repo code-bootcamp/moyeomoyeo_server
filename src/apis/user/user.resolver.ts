@@ -26,6 +26,11 @@ export class UserResolver {
     return this.userService.create({ userInput });
   }
 
+  @Mutation(() => Boolean)
+  deleteUser(@Args('userId') userId: string) {
+    return this.userService.delete({ userId });
+  }
+
   @UseGuards(GqlAccessGuard)
   @Mutation(() => User)
   updateUser(
