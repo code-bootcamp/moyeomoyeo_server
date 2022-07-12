@@ -2,6 +2,7 @@
 /dist
 /node_modules
 /src/commons/graphql/schema.gql
+/key/gcp-file-storage.json
 .env*
 
 # Logs

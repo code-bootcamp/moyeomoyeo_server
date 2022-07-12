@@ -1,12 +1,12 @@
 import { Strategy } from 'passport-google-oauth20';
 import { PassportStrategy } from '@nestjs/passport';
+import 'dotenv/config';
 
 export class JwtGoogleStrategy extends PassportStrategy(Strategy, 'google') {
   constructor() {
     super({
-      clientID:
-        '573058645915-s0089us2sts2n484bi6lo1gf1tr7gpfq.apps.googleusercontent.com',
-      clientSecret: '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',
+      clientID: process.env.GOOGLE_CLIENT_ID,
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET,
       callbackURL: 'http://localhost:3000/login/google',
       scope: ['profile', 'email'],
     });

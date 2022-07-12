@@ -12,4 +12,16 @@ export class AuthController {
   async loginGoogle(@Req() req: Request, @Res() res: Response) {
     return this.authService.loginSocial({ req, res });
   }
+
+  @Get('/login/kakao')
+  @UseGuards(AuthGuard('kakao'))
+  async loginKakao(@Req() req: Request, @Res() res: Response) {
+    return this.authService.loginSocial({ req, res });
+  }
+
+  @Get('/login/naver')
+  @UseGuards(AuthGuard('naver'))
+  async loginNaver(@Req() req: Request, @Res() res: Response) {
+    return this.authService.loginSocial({ req, res });
+  }
 }
