@@ -23,7 +23,7 @@ export class CreateBoardInput {
 
   @Column()
   @Field(() => Number)
-  count: number;
+  viewCount: number;
 
   @Column({ default: false })
   @Field(() => Boolean)

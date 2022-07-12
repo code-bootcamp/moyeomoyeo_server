@@ -22,7 +22,7 @@ export class UpdateBoardInput {
 
   @Column()
   @Field(() => Number)
-  count: number;
+  viewCount: number;
 
   @Column({ default: false })
   @Field(() => Boolean)

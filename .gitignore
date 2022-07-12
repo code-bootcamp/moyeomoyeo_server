@@ -4,6 +4,8 @@
 /src/commons/graphql/schema.gql
 /key/gcp-file-storage.json
 .env*
+/src/apis/fileupload/gcp-file-storage.json
+/key/gcp-file-storage.json
 
 # Logs
 logs
