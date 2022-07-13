@@ -9,6 +9,7 @@ export class ProductService {
     @InjectRepository(Product)
     private readonly productRepository: Repository<Product>,
   ) {}
+
   async create({ productInput }) {
     const result = await this.productRepository.save({
       ...productInput,
