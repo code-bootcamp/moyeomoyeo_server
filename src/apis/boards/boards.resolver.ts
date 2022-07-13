@@ -2,9 +2,10 @@ import { UseGuards } from '@nestjs/common';
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { GqlAccessGuard } from 'src/commons/auth/gql-auth.guard';
 import { TargetUser } from 'src/commons/auth/gql-user.param';
+
 import { BoardService } from './boards.service';
 import { CreateBoardInput } from './dto/createBoard.input';
-import { UpdateBoardInput } from './dto/updateBoard.Input';
+import { UpdateBoardInput } from './dto/updateBoard.input';
 import { Board } from './entities/board.entity';
 
 @Resolver()

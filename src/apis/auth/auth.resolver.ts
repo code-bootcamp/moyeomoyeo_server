@@ -13,4 +13,9 @@ export class AuthResolver {
   ) {
     return this.authService.login({ email, password, context });
   }
+
+  @Mutation(() => String)
+  logout(@Context() context: any) {
+    return this.authService.logout({ context });
+  }
 }

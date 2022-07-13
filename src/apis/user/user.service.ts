@@ -34,6 +34,11 @@ export class UserService {
     return createdUser;
   }
 
+  async delete({ userId }) {
+    const result = await this.userRepository.softDelete({ id: userId });
+    return result.affected ? true : false;
+  }
+
   //로그인 후에만 회원정보 수정 가능
   async update({ targetUser, updateUserInput }) {
     const userFound = await this.findUser({ email: targetUser.email });

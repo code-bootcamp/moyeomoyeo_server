@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Event } from './entities/event.entity';
+import 'dotenv/config';
 import axios from 'axios';
 
 @Injectable()
@@ -12,8 +13,9 @@ export class EventService {
   ) {}
 
   async loadEvents() {
+    const KEY = process.env.OPENAPI_CLIENT_KEY;
     const result = await axios.get(
-      'https://openapi.gg.go.kr/Ggculturevent?KEY=5fa2f78b0c4a4ab5a6a80ff0d3be5b91&pIndex=1&pSize=10&Type=json',
+      `https://openapi.gg.go.kr/Ggculturevent?KEY=${KEY}&pIndex=1&pSize=10&Type=json`,
     );
     console.log(JSON.stringify(result.data.Ggculturevent[1].row[0]));
     await Promise.all(

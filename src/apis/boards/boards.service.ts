@@ -52,7 +52,7 @@ export class BoardService {
     return result;
   }
 
-  async delete(boardId) {
+  async delete({ boardId }) {
     const result = await this.boardRepository.softDelete({ id: boardId });
     return result.affected ? true : false;
   }
