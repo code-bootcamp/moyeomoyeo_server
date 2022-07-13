@@ -5,11 +5,11 @@ import { Injectable } from '@nestjs/common';
 export class FileService {
   async upload({ files }) {
     const waitedFiles = await Promise.all(files);
-    console.log(waitedFiles); // [file, file]
+    // console.log(waitedFiles); // [file, file]
 
     const storage = new Storage({
       projectId: 'rare-gist-352601',
-      keyFilename: 'gcp-file-storage.json',
+      keyFilename: './key/gcp-file-storage.json',
     }).bucket('moyeo-data');
 
     const results = await Promise.all(
@@ -17,11 +17,16 @@ export class FileService {
         return new Promise((resolve, reject) => {
           el.createReadStream()
             .pipe(storage.file(el.filename).createWriteStream())
-            .on('finish', () => resolve(`moyeo-data/${el.filename}`))
-            .on('error', () => reject());
+            .on('finish', () => {
+              resolve(`moyeo-data/${el.filename}`);
+            })
+            .on('error', () => {
+              reject(null);
+            });
         });
       }),
     );
-    return results;
+
+    return results.filter((v) => v !== null);
   }
 }
