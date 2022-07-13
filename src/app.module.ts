@@ -12,17 +12,21 @@ import { RedisClientOptions } from 'redis';
 import * as redisStore from 'cache-manager-redis-store';
 import { PhoneModule } from './apis/phone/phone.module';
 import { EmailModule } from './apis/email/email.module';
+import { ImageModule } from './apis/image/image.module';
+import { ProductModule } from './apis/product/product.module';
 
 @Module({
   imports: [
     EventModule,
     BoardModule,
     BoardAddress,
+    ProductModule,
     FileModule,
     UserModule,
     AuthModule,
     PhoneModule,
     EmailModule,
+    ImageModule,
 
     GraphQLModule.forRoot<ApolloDriverConfig>({
       driver: ApolloDriver,
