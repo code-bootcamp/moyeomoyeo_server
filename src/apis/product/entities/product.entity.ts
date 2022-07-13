@@ -5,6 +5,7 @@ import { User } from 'src/apis/user/entities/user.entity';
 import {
   Column,
   CreateDateColumn,
+  DeleteDateColumn,
   Entity,
   JoinColumn,
   ManyToMany,
@@ -45,12 +46,17 @@ export class Product {
   @Field(() => Date)
   createdAt: Date;
 
+  @DeleteDateColumn()
+  @Field(() => Date)
+  deletedAt: Date;
+
   @Column({ default: false })
   @Field(() => Boolean)
   isSoldout: boolean;
 
   @JoinColumn()
   @OneToOne(() => Image)
+  @Field(() => Image)
   mainImage: Image;
 
   @OneToMany(() => Image, (images) => images.product)

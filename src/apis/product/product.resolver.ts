@@ -21,4 +21,9 @@ export class ProductResolver {
   createProduct(@Args('productInput') productInput: ProductInput) {
     return this.productService.create({ productInput });
   }
+
+  @Mutation(() => Boolean)
+  deleteProduct(@Args('productId') productId: string) {
+    return this.productService.delete({ productId });
+  }
 }

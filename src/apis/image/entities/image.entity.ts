@@ -30,7 +30,7 @@ export class Image {
   deletedAt: Date;
 
   @JoinTable()
-  @ManyToOne(() => Product, (product) => product.images)
+  @ManyToOne(() => Product, (product) => product.subImages)
   @Field(() => Product)
   product: Product;
 }
