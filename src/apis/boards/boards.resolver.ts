@@ -1,7 +1,7 @@
-import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
+import { Args, Mutation, Resolver } from '@nestjs/graphql';
 import { BoardService } from './boards.service';
 import { CreateBoardInput } from './dto/createBoard.input';
-import { UpdateBoardInput } from './dto/updateBoard.Input';
+import { UpdateBoardInput } from './dto/updateBoard.input';
 import { Board } from './entities/board.entity';
 
 @Resolver()

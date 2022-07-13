@@ -15,7 +15,11 @@ export class ProductInput {
   contentSrc: string;
 
   @Field(() => String)
-  imgSrc: string;
+  mainImgSrc: string;
 
-  // 추가이미지
+  @Field(() => [String])
+  subImgSrcs: string[];
+
+  @Field(() => String)
+  userId: string;
 }

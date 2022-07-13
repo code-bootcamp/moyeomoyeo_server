@@ -1,13 +1,8 @@
-import { Injectable } from '@nestjs/common';
 import { Field, InputType } from '@nestjs/graphql';
-import { Column, PrimaryGeneratedColumn } from 'typeorm';
+import { Column } from 'typeorm';
 
 @InputType()
 export class UpdateBoardInput {
-  //   @PrimaryGeneratedColumn('uuid')
-  //   @Field(() => String)
-  //   id: string;
-
   @Column()
   @Field(() => String)
   writer: string;

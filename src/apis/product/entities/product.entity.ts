@@ -1,4 +1,5 @@
 import { Field, Int, ObjectType } from '@nestjs/graphql';
+import { Image } from 'src/apis/image/entities/image.entity';
 import { Payment } from 'src/apis/payment/entities/payment.entity';
 import { User } from 'src/apis/user/entities/user.entity';
 import {
@@ -8,6 +9,7 @@ import {
   JoinColumn,
   ManyToMany,
   ManyToOne,
+  OneToMany,
   OneToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
@@ -47,9 +49,13 @@ export class Product {
   @Field(() => Boolean)
   isSoldout: boolean;
 
-  @Column()
-  @Field(() => String)
-  imgSrc: string;
+  @JoinColumn()
+  @OneToOne(() => Image)
+  mainImage: Image;
+
+  @OneToMany(() => Image, (images) => images.product)
+  @Field(() => [Image])
+  subImages: Image[];
 
   @ManyToOne(() => User)
   @Field(() => User)
