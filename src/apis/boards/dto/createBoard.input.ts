@@ -11,10 +11,6 @@ export class CreateBoardInput {
 
   @Column()
   @Field(() => String)
-  writer: string;
-
-  @Column()
-  @Field(() => String)
   title: string;
 
   @Column()
