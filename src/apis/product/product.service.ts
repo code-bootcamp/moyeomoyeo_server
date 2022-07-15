@@ -57,4 +57,21 @@ export class ProductService {
     const result = await this.productRepository.softDelete({ id: productId });
     return result.affected ? true : false;
   }
+
+  // async dibs({ targetUser, productId }) {
+  //   const userFound = await this.userRepository.findOne({
+  //     where: { email: targetUser.email },
+  //   });
+  //   const productFound = await this.productRepository.findOne({
+  //     where: { id: productId },
+  //   });
+  //   let userArr = productFound.likedUsers;
+  //   if (!userArr) userArr = [];
+  //   userArr.push(userFound);
+  //   const updatedProduct = await this.productRepository.save({
+  //     ...productFound,
+  //     likedUsers: userArr,
+  //   });
+  //   return updatedProduct.likedUsers;
+  // }
 }
