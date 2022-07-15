@@ -14,6 +14,7 @@ import { PhoneModule } from './apis/phone/phone.module';
 import { EmailModule } from './apis/email/email.module';
 import { ImageModule } from './apis/image/image.module';
 import { ProductModule } from './apis/product/product.module';
+import { PaymentModule } from './apis/payment/payment.module';
 
 @Module({
   imports: [
@@ -21,6 +22,7 @@ import { ProductModule } from './apis/product/product.module';
     BoardModule,
     BoardAddress,
     ProductModule,
+    PaymentModule,
     FileModule,
     UserModule,
     AuthModule,

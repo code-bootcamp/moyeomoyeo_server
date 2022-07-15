@@ -1,4 +1,8 @@
+import { UseGuards } from '@nestjs/common';
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
+import { GqlAccessGuard } from 'src/commons/auth/gql-auth.guard';
+import { TargetUser } from 'src/commons/auth/gql-user.param';
+import { User } from '../user/entities/user.entity';
 import { ProductInput } from './dto/product.input';
 import { Product } from './entities/product.entity';
 import { ProductService } from './product.service';
@@ -26,4 +30,13 @@ export class ProductResolver {
   deleteProduct(@Args('productId') productId: string) {
     return this.productService.delete({ productId });
   }
+
+  // @UseGuards(GqlAccessGuard)
+  // @Mutation(() => [User])
+  // dibsProduct(
+  //   @TargetUser('targetUser') targetUser: any,
+  //   @Args('productId') productId: string,
+  // ) {
+  //   return this.productService.dibs({ targetUser, productId });
+  // }
 }

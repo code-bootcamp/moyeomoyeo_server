@@ -59,6 +59,7 @@ export class User {
   @Field(() => String)
   manager: string;
 
+  @JoinTable()
   @ManyToMany(() => Board, (scheduledBoards) => scheduledBoards.scheduledUsers)
   @Field(() => [Board])
   scheduledBoards: Board[];
