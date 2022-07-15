@@ -17,7 +17,10 @@ export class UserService {
   }
 
   async findUser({ email }) {
-    const result = await this.userRepository.findOne({ where: { email } });
+    const result = await this.userRepository.findOne({
+      where: { email },
+      //relations: ['scheduledBoards', 'dibsProducts', 'dibsEvent'],
+    });
     return result;
   }
 
