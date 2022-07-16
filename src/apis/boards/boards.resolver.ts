@@ -13,6 +13,7 @@ export class BoardResolver {
     private readonly boardService: BoardService, //
   ) {}
 
+  @UseGuards(GqlAccessGuard)
   @Query(() => [Board])
   fetchBoards() {
     return this.boardService.findAll();

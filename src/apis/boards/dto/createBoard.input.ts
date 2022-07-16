@@ -1,6 +1,7 @@
 import { Field, InputType } from '@nestjs/graphql';
 import { BoardAddressInput } from 'src/apis/address/dto/Board.address.input';
 import { Column } from 'typeorm';
+import { BoardDateInput } from '../../date/dto/boardDate.input';
 
 @InputType()
 export class CreateBoardInput {
@@ -21,12 +22,12 @@ export class CreateBoardInput {
   isFull: boolean;
 
   @Column()
-  @Field(() => Date)
-  targetDate: Date;
+  @Field(() => BoardDateInput)
+  targetDate: BoardDateInput;
 
   @Column()
-  @Field(() => String)
-  transport: string;
+  @Field(() => [String])
+  transport: string[];
 
   @Field(() => BoardAddressInput)
   boardAddress: BoardAddressInput;

@@ -1,5 +1,6 @@
 import { Field, Int, ObjectType } from '@nestjs/graphql';
 import { BoardAddress } from 'src/apis/address/entities/Board.address.entity';
+import { BoardDate } from 'src/apis/date/entities/boardDate.entity';
 import { Event } from 'src/apis/event/entities/event.entity';
 import { User } from 'src/apis/user/entities/user.entity';
 import {
@@ -35,13 +36,12 @@ export class Board {
   @Field(() => Boolean)
   isFull: boolean;
 
-  @Column()
-  @Field(() => String)
-  targetDate: Date;
-
   // @Column()
+  @JoinColumn()
+  @OneToOne(() => BoardDate)
   // @Field(() => String)
-  // targetEnd: Date;
+  @Field(() => BoardDate)
+  targetDate: BoardDate;
 
   @Column()
   @Field(() => String)
