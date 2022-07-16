@@ -1,4 +1,4 @@
-import { Field, InputType } from '@nestjs/graphql';
+import { Field, InputType, Int } from '@nestjs/graphql';
 import { Column } from 'typeorm';
 
 @InputType()
@@ -18,6 +18,10 @@ export class UpdateBoardInput {
   @Column()
   @Field(() => Number)
   viewCount: number;
+
+  @Column({ default: 1 })
+  @Field(() => Int)
+  personCount: number;
 
   @Column({ default: false })
   @Field(() => Boolean)

@@ -1,4 +1,4 @@
-import { Field, InputType } from '@nestjs/graphql';
+import { Field, InputType, Int } from '@nestjs/graphql';
 import { BoardAddressInput } from 'src/apis/address/dto/Board.address.input';
 import { Column } from 'typeorm';
 import { BoardDateInput } from '../../date/dto/boardDate.input';
@@ -16,6 +16,10 @@ export class CreateBoardInput {
   @Column()
   @Field(() => Number)
   viewCount: number;
+
+  @Column({ default: 1 })
+  @Field(() => Int)
+  personCount: number;
 
   @Column({ default: false })
   @Field(() => Boolean)

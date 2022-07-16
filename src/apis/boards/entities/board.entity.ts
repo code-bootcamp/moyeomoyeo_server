@@ -32,6 +32,10 @@ export class Board {
   @Field(() => Int)
   viewCount: number;
 
+  @Column({ default: 1 })
+  @Field(() => Int)
+  personCount: number;
+
   @Column({ default: false })
   @Field(() => Boolean)
   isFull: boolean;
