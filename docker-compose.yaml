@@ -3,6 +3,7 @@ version: '3.7'
 services:
   server:
     platform: linux/x86_64
+    image: asia.gcr.io/project-354810/server-service:6.0
     build:
       context: .
       dockerfile: Dockerfile
@@ -22,7 +23,7 @@ services:
   #   ports:
   #     - 3306:3306
 
-  redis:
-    image: redis:latest
-    ports:
-      - 6379:6379
+  # redis:
+  #   image: redis:latest
+  #   ports:
+  #     - 6379:6379

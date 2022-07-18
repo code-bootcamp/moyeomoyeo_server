@@ -31,4 +31,11 @@ export class EventService {
     );
     return JSON.stringify(result.data);
   }
+
+  async findEvents({ searchWord }) {
+    const events = await this.eventRepository.find({
+      where: { name: searchWord },
+    });
+    return events;
+  }
 }

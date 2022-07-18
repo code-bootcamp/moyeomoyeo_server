@@ -1,4 +1,5 @@
 import { Field, Int, ObjectType } from '@nestjs/graphql';
+import { Comment } from 'src/apis/comment/entities/comment.entity';
 import { Image } from 'src/apis/image/entities/image.entity';
 import { Payment } from 'src/apis/payment/entities/payment.entity';
 import { User } from 'src/apis/user/entities/user.entity';
@@ -61,7 +62,7 @@ export class Product {
   mainImage: Image;
 
   @OneToMany(() => Image, (images) => images.product)
-  @Field(() => [Image])
+  @Field(() => [Image], { nullable: true })
   subImages: Image[];
 
   @ManyToOne(() => User)
@@ -70,10 +71,16 @@ export class Product {
 
   @JoinColumn()
   @OneToOne(() => Payment)
-  @Field(() => Payment)
+  @Field(() => Payment, { nullable: true })
   transaction: Payment;
 
+  @JoinTable()
   @ManyToMany(() => User, (likedUsers) => likedUsers.dibsProducts)
-  @Field(() => [User])
+  @Field(() => [User], { nullable: true })
   likedUsers: User[];
+
+  @JoinTable()
+  @OneToMany(() => Comment, (comments) => comments.parentProduct)
+  @Field(() => [Comment])
+  comments: Comment[];
 }
