@@ -2,6 +2,7 @@ import { UseGuards } from '@nestjs/common';
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { GqlAccessGuard } from 'src/commons/auth/gql-auth.guard';
 import { TargetUser } from 'src/commons/auth/gql-user.param';
+import { User } from '../user/entities/user.entity';
 import { PostInput } from './dto/post.input';
 import { UpdatePostInput } from './dto/updatePost.input';
 import { Post } from './entities/post.entity';
@@ -28,10 +29,10 @@ export class PostResolver {
   @UseGuards(GqlAccessGuard)
   @Mutation(() => Post)
   createPost(
-    @TargetUser() payload: any,
+    @TargetUser() targetUser: any,
     @Args('postInput') postInput: PostInput, //
   ) {
-    return this.postService.create({ payload, postInput });
+    return this.postService.create({ targetUser, postInput });
   }
 
   @Mutation(() => Post)
@@ -45,5 +46,17 @@ export class PostResolver {
   @Mutation(() => Boolean)
   deletePost(@Args('postId') postId: string) {
     return this.postService.delete({ postId });
+  }
+
+  @UseGuards(GqlAccessGuard)
+  @Mutation(() => [User])
+  dibsPost(@TargetUser() targetUser: any, @Args('postId') postId: string) {
+    return this.postService.dibs({ targetUser, postId });
+  }
+
+  @UseGuards(GqlAccessGuard)
+  @Mutation(() => [User])
+  undibsPost(@TargetUser() targetUser: any, @Args('postId') postId: string) {
+    return this.postService.cancelDibs({ targetUser, postId });
   }
 }

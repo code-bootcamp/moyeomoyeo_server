@@ -12,14 +12,16 @@ export class UserService {
   ) {}
 
   async findUsers() {
-    const result = await this.userRepository.find();
+    const result = await this.userRepository.find({
+      relations: ['scheduledBoards', 'dibsProducts', 'dibsPosts'],
+    });
     return result;
   }
 
   async findUser({ email }) {
     const result = await this.userRepository.findOne({
       where: { email },
-      //relations: ['scheduledBoards', 'dibsProducts', 'dibsEvent'],
+      relations: ['scheduledBoards', 'dibsProducts', 'dibsPosts'],
     });
     return result;
   }
