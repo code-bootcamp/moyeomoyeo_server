@@ -19,7 +19,4 @@ export class ProductInput {
 
   @Field(() => [String])
   subImgSrcs: string[];
-
-  @Field(() => String)
-  userId: string;
 }

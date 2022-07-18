@@ -1,10 +1,11 @@
 import { Field, Int, ObjectType } from '@nestjs/graphql';
-import { Category } from 'src/apis/category/entities/category.entity';
+import { Image } from 'src/apis/image/entities/image.entity';
 import { User } from 'src/apis/user/entities/user.entity';
 import {
   Column,
   CreateDateColumn,
   Entity,
+  JoinColumn,
   JoinTable,
   ManyToMany,
   ManyToOne,
@@ -29,15 +30,19 @@ export class Post {
 
   @Column()
   @Field(() => String)
-  fileSrc: string;
+  description: string;
+
+  @JoinColumn()
+  @Field(() => Image)
+  mainImage: Image;
+
+  @ManyToOne(() => Image)
+  @Field(() => [Image])
+  subImages: Image[];
 
   @Column()
   @Field(() => String)
-  headerImgSrc: string;
-
-  @Column()
-  @Field(() => String)
-  hashtags: string;
+  category: string;
 
   @CreateDateColumn()
   @Field(() => Date)
@@ -47,12 +52,12 @@ export class Post {
   @Field(() => Date)
   editedAt: Date;
 
-  @Column()
+  @Column({ default: 0 })
   @Field(() => Int)
   viewCount: number;
 
   @JoinTable()
-  @ManyToMany(() => Category, (categories) => categories.posts)
-  @Field(() => [Category])
-  categories: Category[];
+  @ManyToMany(() => User, (likedUsers) => likedUsers.dibsPosts)
+  @Field(() => [User], { nullable: true })
+  likedUsers: User[];
 }

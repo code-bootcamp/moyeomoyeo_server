@@ -14,14 +14,20 @@ import { PhoneModule } from './apis/phone/phone.module';
 import { EmailModule } from './apis/email/email.module';
 import { ImageModule } from './apis/image/image.module';
 import { ProductModule } from './apis/product/product.module';
+import { PaymentModule } from './apis/payment/payment.module';
+import { PostModule } from './apis/post/post.module';
+import { CommentModule } from './apis/comment/comment.module';
 
 @Module({
   imports: [
     EventModule,
     BoardModule,
     BoardAddress,
+    CommentModule,
     ProductModule,
+    PaymentModule,
     FileModule,
+    PostModule,
     UserModule,
     AuthModule,
     PhoneModule,
@@ -32,10 +38,16 @@ import { ProductModule } from './apis/product/product.module';
       driver: ApolloDriver,
       autoSchemaFile: 'src/commons/graphql/schema.gql',
       context: ({ req, res }) => ({ req, res }),
+      cors: {
+        origin: 'http://localhost:3000',
+        credentials: 'include',
+        exposedHeaders: ['Authorization', 'Set-Cookie', 'Cookie'],
+      },
     }),
     TypeOrmModule.forRoot({
       type: 'mysql',
-      host: 'my-database',
+      //host: 'my-database',
+      host: '10.13.16.3',
       port: 3306,
       username: 'root',
       password: 'root',
@@ -46,7 +58,8 @@ import { ProductModule } from './apis/product/product.module';
     }),
     CacheModule.register<RedisClientOptions>({
       store: redisStore,
-      url: 'redis://redis:6379',
+      //url: 'redis://redis:6379',
+      url: 'redis://10.13.17.3:6379',
       isGlobal: true,
     }),
   ],

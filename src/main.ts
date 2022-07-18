@@ -5,7 +5,11 @@ import * as cookieParser from 'cookie-parser';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
-  app.enableCors();
+  app.enableCors({
+    origin: 'http://localhost:3000',
+    credentials: true,
+    exposedHeaders: ['Authorization', 'Set-Cookie', 'Cookie'],
+  });
   app.use(graphqlUploadExpress());
   app.use(cookieParser());
   await app.listen(3000);
