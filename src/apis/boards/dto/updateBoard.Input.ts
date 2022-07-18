@@ -23,6 +23,10 @@ export class UpdateBoardInput {
   @Field(() => Int)
   personCount: number;
 
+  @Column({ default: 1 })
+  @Field(() => Int)
+  personMax: number;
+
   @Column({ default: false })
   @Field(() => Boolean)
   isFull: boolean;

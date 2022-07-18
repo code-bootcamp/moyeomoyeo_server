@@ -1,8 +1,8 @@
 import { Field, Int, ObjectType } from '@nestjs/graphql';
 import { BoardAddress } from 'src/apis/address/entities/Board.address.entity';
-import { BoardDate } from 'src/apis/date/entities/boardDate.entity';
 import { Comment } from 'src/apis/comment/entities/comment.entity';
 import { Event } from 'src/apis/event/entities/event.entity';
+import { Image } from 'src/apis/image/entities/image.entity';
 import { User } from 'src/apis/user/entities/user.entity';
 import {
   Column,
@@ -43,12 +43,11 @@ export class Board {
   @Field(() => Boolean)
   isFull: boolean;
 
-  // @Column()
-  @JoinColumn()
-  @OneToOne(() => BoardDate)
-  // @Field(() => String)
-  @Field(() => BoardDate)
-  targetDate: BoardDate;
+  @Column(() => String)
+  startDate: Date;
+
+  @Column(() => String)
+  endDate: Date;
 
   @Column()
   @Field(() => String)
@@ -75,4 +74,8 @@ export class Board {
   @OneToMany(() => Comment, (comments) => comments.parentBoard)
   @Field(() => [Comment])
   comments: Comment[];
+
+  @JoinColumn()
+  @Field(() => Image)
+  coverImage: Image;
 }
