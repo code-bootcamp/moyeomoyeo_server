@@ -32,6 +32,6 @@ export class UpdateBoardInput {
   targetDate: Date;
 
   @Column()
-  @Field(() => String)
-  transport: string;
+  @Field(() => [String])
+  transport: string[];
 }
