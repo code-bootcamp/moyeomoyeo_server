@@ -56,14 +56,9 @@ export class Product {
   @Field(() => Boolean)
   isSoldout: boolean;
 
-  @JoinColumn()
-  @OneToOne(() => Image)
-  @Field(() => Image)
-  mainImage: Image;
-
   @OneToMany(() => Image, (images) => images.product)
   @Field(() => [Image], { nullable: true })
-  subImages: Image[];
+  images: Image[];
 
   @ManyToOne(() => User)
   @Field(() => User)

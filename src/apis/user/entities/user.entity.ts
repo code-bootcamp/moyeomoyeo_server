@@ -20,7 +20,7 @@ export class User {
   @Field(() => String)
   id: string;
 
-  @Column()
+  @Column({ nullable: true })
   @Field(() => String)
   name: string;
 
@@ -49,15 +49,19 @@ export class User {
   isSubscribed: boolean;
 
   @Column({ default: false })
+  @Field(() => Boolean, { nullable: true })
+  isAuth: boolean;
+
+  @Column({ default: false })
   @Field(() => Boolean)
   isAdmin: boolean;
 
   @Column({ nullable: true })
-  @Field(() => String)
+  @Field(() => String, { nullable: true })
   institution: string;
 
   @Column({ nullable: true })
-  @Field(() => String)
+  @Field(() => String, { nullable: true })
   manager: string;
 
   @JoinTable()

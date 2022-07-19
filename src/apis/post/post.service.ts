@@ -18,7 +18,7 @@ export class PostService {
   ) {}
 
   async create({ targetUser, postInput }) {
-    const { mainImgSrc, subImgSrcs, ...postInfo } = postInput;
+    const { imgSrcs, ...postInfo } = postInput;
 
     // 유저 찾기
     const user = await this.userRepository.findOne({
@@ -28,19 +28,15 @@ export class PostService {
     if (!user.institution)
       throw new UnauthorizedException('관계자 계정으로 다시 시도해주세요.');
 
-    // 대표 이미지 불러오기
-    const mainImage = await this.imageService.create({ src: mainImgSrc });
-
-    // 추가 이미지 리스트 불러오기
-    const subImages = await Promise.all(
-      subImgSrcs.map((element) => {
+    // 이미지 리스트 불러오기
+    const images = await Promise.all(
+      imgSrcs.map((element) => {
         return this.imageService.create({ src: element });
       }),
     );
 
     const result = await this.postRepository.save({
-      mainImage,
-      subImages,
+      images,
       writer: user,
       ...postInfo,
     });
@@ -83,7 +79,7 @@ export class PostService {
     const postFound = await this.postRepository.findOne({
       where: { id: postId },
       // prettier-ignore
-      relations: ['writer', 'mainImage', 'subImages', 'likedUsers'],
+      relations: ['writer', 'images', 'likedUsers'],
     });
 
     let userArr = postFound.likedUsers;
@@ -105,7 +101,7 @@ export class PostService {
     const postFound = await this.postRepository.findOne({
       where: { id: postId },
       // prettier-ignore
-      relations: ['writer', 'mainImage', 'subImages', 'likedUsers'],
+      relations: ['writer', 'images', 'likedUsers'],
     });
     let userArr = postFound.likedUsers;
 
