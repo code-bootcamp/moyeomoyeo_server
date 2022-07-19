@@ -47,7 +47,7 @@ import { CommentModule } from './apis/comment/comment.module';
     TypeOrmModule.forRoot({
       type: 'mysql',
       host: 'my-database',
-      //host: '10.13.16.3',
+//host: '10.13.16.3',
       port: 3306,
       username: 'root',
       password: 'root',
@@ -60,7 +60,7 @@ import { CommentModule } from './apis/comment/comment.module';
     CacheModule.register<RedisClientOptions>({
       store: redisStore,
       url: 'redis://redis:6379',
-      //url: 'redis://10.13.17.3:6379',
+      // url: 'redis://10.13.17.3:6379'
       isGlobal: true,
     }),
   ],

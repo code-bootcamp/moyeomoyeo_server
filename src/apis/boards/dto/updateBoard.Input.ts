@@ -1,4 +1,4 @@
-import { Field, InputType } from '@nestjs/graphql';
+import { Field, InputType, Int } from '@nestjs/graphql';
 import { Column } from 'typeorm';
 
 @InputType()
@@ -19,6 +19,14 @@ export class UpdateBoardInput {
   @Field(() => Number)
   viewCount: number;
 
+  @Column({ default: 1 })
+  @Field(() => Int)
+  personCount: number;
+
+  @Column({ default: 1 })
+  @Field(() => Int)
+  personMax: number;
+
   @Column({ default: false })
   @Field(() => Boolean)
   isFull: boolean;
@@ -28,6 +36,6 @@ export class UpdateBoardInput {
   targetDate: Date;
 
   @Column()
-  @Field(() => String)
-  transport: string;
+  @Field(() => [String])
+  transport: string[];
 }
