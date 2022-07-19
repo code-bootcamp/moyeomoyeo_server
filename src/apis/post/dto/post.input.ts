@@ -1,4 +1,4 @@
-import { Field, InputType, Int, ObjectType } from '@nestjs/graphql';
+import { Field, InputType } from '@nestjs/graphql';
 import { Entity } from 'typeorm';
 
 @Entity()
@@ -19,11 +19,8 @@ export class PostInput {
   @Field(() => String)
   description: string;
 
-  @Field(() => String)
-  mainImgSrc: string;
-
   @Field(() => [String])
-  subImgSrcs: string[];
+  imgSrcs: string[];
 
   @Field(() => String)
   category: string;

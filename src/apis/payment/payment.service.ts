@@ -8,6 +8,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Connection, Repository } from 'typeorm';
 import { IamportService } from '../iamport/iamport.service';
 import { Product } from '../product/entities/product.entity';
+import { User } from '../user/entities/user.entity';
 import { Payment, PAYMENT_STATUS } from './entities/payment.entity';
 
 @Injectable()
@@ -17,11 +18,13 @@ export class PaymentService {
     private readonly productRepository: Repository<Product>,
     @InjectRepository(Payment)
     private readonly paymentRepository: Repository<Payment>,
+    @InjectRepository(User)
+    private readonly userRepository: Repository<User>,
     private readonly iamportService: IamportService,
     private readonly connection: Connection,
   ) {}
 
-  async create({ impUid, productId, targetUser }) {
+  async create({ impUid, productId, address, targetUser }) {
     const access_token = await this.iamportService.getToken();
     const data = await this.iamportService.getPaymentData({
       access_token,
@@ -29,6 +32,9 @@ export class PaymentService {
     });
     const productFound = await this.productRepository.findOne({
       where: { id: productId },
+    });
+    const userFound = await this.userRepository.findOne({
+      where: { email: targetUser.email },
     });
 
     // 체크 진행
@@ -45,7 +51,8 @@ export class PaymentService {
         impUid,
         status: PAYMENT_STATUS.PAYMENT,
         payAmount: productFound.price,
-        buyer: targetUser,
+        buyer: userFound,
+        retrieveAddress: address,
       });
       await queryRunner.manager.save(transaction);
 
@@ -68,23 +75,21 @@ export class PaymentService {
     }
   }
 
-  async cancel({ impUid, productId, targetUser }) {
+  async cancel({ impUid, productId }) {
     const paymentFound = await this.paymentRepository.find({
       where: { impUid },
+      relations: ['buyer'],
     });
     if (paymentFound.length > 1)
       throw new UnprocessableEntityException(
         'Error 422: 이미 환불이 완료되었습니다.',
       );
-    const productFound = await this.productRepository.findOne({
-      where: { id: productId },
-    });
 
     const access_token = await this.iamportService.getToken();
     await this.iamportService.requestCancel({
       access_token,
       impUid,
-      price: productFound.price,
+      price: paymentFound[0].payAmount,
     });
 
     const queryRunner = await this.connection.createQueryRunner();
@@ -93,10 +98,8 @@ export class PaymentService {
 
     try {
       const cancelTransaction = this.paymentRepository.create({
-        impUid,
+        ...paymentFound[0],
         status: PAYMENT_STATUS.CANCELLATION,
-        payAmount: productFound.price,
-        buyer: targetUser,
       });
       await queryRunner.manager.save(cancelTransaction);
 

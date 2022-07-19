@@ -3,6 +3,7 @@ import { BoardAddress } from 'src/apis/address/entities/Board.address.entity';
 import { Comment } from 'src/apis/comment/entities/comment.entity';
 import { Event } from 'src/apis/event/entities/event.entity';
 import { Image } from 'src/apis/image/entities/image.entity';
+import { Post } from 'src/apis/post/entities/post.entity';
 import { User } from 'src/apis/user/entities/user.entity';
 import {
   Column,
@@ -56,6 +57,10 @@ export class Board {
   @ManyToOne(() => User)
   @Field(() => User)
   writer: User;
+
+  @ManyToOne(() => Post)
+  @Field(() => Post)
+  parentPost: Post;
 
   @ManyToOne(() => Event)
   @Field(() => Event)
