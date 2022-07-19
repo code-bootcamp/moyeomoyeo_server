@@ -43,4 +43,8 @@ export class Payment {
   @ManyToOne(() => User)
   @Field(() => User)
   buyer: User;
+
+  @Column()
+  @Field(() => String)
+  retrieveAddress: string;
 }

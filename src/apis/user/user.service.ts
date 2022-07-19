@@ -1,4 +1,9 @@
-import { ConflictException, Injectable } from '@nestjs/common';
+import {
+  ConflictException,
+  Injectable,
+  UnauthorizedException,
+  UnprocessableEntityException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { User } from './entities/user.entity';
@@ -26,6 +31,14 @@ export class UserService {
     return result;
   }
 
+  async findLoginUser({ targetUser }) {
+    const userFound = await this.userRepository.findOne({
+      where: { email: targetUser.email },
+      relations: ['scheduledBoards', 'dibsProducts', 'dibsPosts'],
+    });
+    return userFound;
+  }
+
   async create({ userInput }) {
     const { email, password, ...userInfo } = userInput;
     const userFound = await this.userRepository.findOne({ where: { email } });
@@ -44,7 +57,6 @@ export class UserService {
     return result.affected ? true : false;
   }
 
-  //로그인 후에만 회원정보 수정 가능
   async update({ targetUser, updateUserInput }) {
     const userFound = await this.findUser({ email: targetUser.email });
     const updatedUser = await this.userRepository.save({
@@ -52,5 +64,16 @@ export class UserService {
       ...updateUserInput,
     });
     return updatedUser;
+  }
+
+  // 비밀번호 재설정 버튼별로 기능 분리: sendEmail, authorizeReset, resetPassword
+  async resetPassword({ email, newPassword }) {
+    const userFound = await this.userRepository.findOne({ where: { email } });
+    if (!userFound.isAuth)
+      throw new UnauthorizedException('Error 401: 인증을 다시 시도해주세요.');
+    const hashedNew = await bcrypt.hash(newPassword, 12);
+    await this.userRepository.update({ email }, { password: hashedNew });
+    await this.userRepository.update({ email }, { isAuth: false });
+    return true;
   }
 }

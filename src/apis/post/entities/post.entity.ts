@@ -30,15 +30,23 @@ export class Post {
 
   @Column()
   @Field(() => String)
+  address: string;
+
+  @Column()
+  @Field(() => String)
   description: string;
 
-  @JoinColumn()
-  @Field(() => Image)
-  mainImage: Image;
+  @Column()
+  @Field(() => Date)
+  dateStart: Date;
+
+  @Column()
+  @Field(() => Date)
+  dateEnd: Date;
 
   @ManyToOne(() => Image)
   @Field(() => [Image])
-  subImages: Image[];
+  images: Image[];
 
   @Column()
   @Field(() => String)

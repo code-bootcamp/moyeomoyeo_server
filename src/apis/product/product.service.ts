@@ -16,19 +16,18 @@ export class ProductService {
   ) {}
 
   async create({ targetUser, productInput }) {
-    const { mainImgSrc, subImgSrcs, ...productInfo } = productInput;
+    const { mainImgSrc, imgSrcs, ...productInfo } = productInput;
     const seller = await this.userRepository.findOne({
       where: { email: targetUser.email },
     });
-    const mainImage = await this.imageService.create({ src: mainImgSrc });
-    const subImages = await Promise.all(
-      subImgSrcs.map((element) => {
+    const images = await Promise.all(
+      imgSrcs.map((element: string) => {
         return this.imageService.create({ src: element });
       }),
     );
     // prettier-ignore
     const result = await this.productRepository.save({ 
-      seller, mainImage, subImages, ...productInfo 
+      seller, images, ...productInfo 
     });
     return result;
   }
@@ -50,7 +49,7 @@ export class ProductService {
   async findAll() {
     const products = await this.productRepository.find({
       // prettier-ignore
-      relations: ['mainImage', 'subImages', 'seller', 'transaction', 'comments'],
+      relations: ['images', 'seller', 'transaction', 'comments'],
     });
     return products;
   }
@@ -59,7 +58,7 @@ export class ProductService {
     const product = await this.productRepository.findOne({
       where: { id: productId },
       // prettier-ignore
-      relations: ['mainImage', 'subImages', 'seller', 'transaction', 'comments'],
+      relations: ['images', 'seller', 'transaction', 'comments'],
     });
     return product;
   }
@@ -78,7 +77,7 @@ export class ProductService {
     const productFound = await this.productRepository.findOne({
       where: { id: productId },
       // prettier-ignore
-      relations: [ 'mainImage', 'subImages', 'seller', 'transaction', 'likedUsers'],
+      relations: [ 'images', 'seller', 'transaction', 'likedUsers'],
     });
 
     let userArr = productFound.likedUsers;
@@ -100,7 +99,7 @@ export class ProductService {
     const productFound = await this.productRepository.findOne({
       where: { id: productId },
       // prettier-ignore
-      relations: [ 'mainImage', 'subImages', 'seller', 'transaction', 'likedUsers'],
+      relations: [ 'images', 'seller', 'transaction', 'likedUsers'],
     });
     let userArr = productFound.likedUsers;
 
