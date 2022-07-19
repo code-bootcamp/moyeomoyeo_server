@@ -1,6 +1,7 @@
 import { Field, ObjectType } from '@nestjs/graphql';
 import { Board } from 'src/apis/boards/entities/board.entity';
 import { Event } from 'src/apis/event/entities/event.entity';
+import { Post } from 'src/apis/post/entities/post.entity';
 import { Product } from 'src/apis/product/entities/product.entity';
 import {
   Column,
@@ -19,7 +20,7 @@ export class User {
   @Field(() => String)
   id: string;
 
-  @Column()
+  @Column({ nullable: true })
   @Field(() => String)
   name: string;
 
@@ -48,29 +49,31 @@ export class User {
   isSubscribed: boolean;
 
   @Column({ default: false })
+  @Field(() => Boolean, { nullable: true })
+  isAuth: boolean;
+
+  @Column({ default: false })
   @Field(() => Boolean)
   isAdmin: boolean;
 
   @Column({ nullable: true })
-  @Field(() => String)
+  @Field(() => String, { nullable: true })
   institution: string;
 
   @Column({ nullable: true })
-  @Field(() => String)
+  @Field(() => String, { nullable: true })
   manager: string;
 
   @JoinTable()
   @ManyToMany(() => Board, (scheduledBoards) => scheduledBoards.scheduledUsers)
-  @Field(() => [Board])
+  @Field(() => [Board], { nullable: true })
   scheduledBoards: Board[];
 
-  @JoinTable()
   @ManyToMany(() => Product, (dibsProducts) => dibsProducts.likedUsers)
-  @Field(() => [Product])
+  @Field(() => [Product], { nullable: true })
   dibsProducts: Product[];
 
-  @JoinTable()
-  @ManyToMany(() => Event, (dibsEvent) => dibsEvent.likedUsers)
-  @Field(() => [Event])
-  dibsEvent: Event[];
+  @ManyToMany(() => Post, (dibsPosts) => dibsPosts.likedUsers)
+  @Field(() => [Post], { nullable: true })
+  dibsPosts: Post[];
 }

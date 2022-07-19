@@ -41,8 +41,4 @@ export class Event {
   @OneToOne(() => Post)
   @Field(() => Post)
   post: Post;
-
-  @ManyToMany(() => User, (likedUsers) => likedUsers.dibsEvent)
-  @Field(() => [User])
-  likedUsers: User[];
 }

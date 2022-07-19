@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { Image } from '../image/entities/image.entity';
+import { ImageService } from '../image/image.service';
 import { User } from '../user/entities/user.entity';
 import { Product } from './entities/product.entity';
 
@@ -12,34 +12,44 @@ export class ProductService {
     private readonly productRepository: Repository<Product>,
     @InjectRepository(User)
     private readonly userRepository: Repository<User>,
-    @InjectRepository(Image)
-    private readonly imageRepository: Repository<Image>,
+    private readonly imageService: ImageService,
   ) {}
 
-  async create({ productInput }) {
-    const { userId, mainImgSrc, subImgSrcs, ...productInfo } = productInput;
-    const seller = await this.userRepository.findOne({ where: { id: userId } });
-    const mainImage = await this.imageRepository.findOne({
-      where: { src: mainImgSrc },
+  async create({ targetUser, productInput }) {
+    const { mainImgSrc, imgSrcs, ...productInfo } = productInput;
+    const seller = await this.userRepository.findOne({
+      where: { email: targetUser.email },
     });
-    const subImages = await Promise.all(
-      subImgSrcs.map((el) => {
-        return this.imageRepository.findOne({ where: { src: el } });
+    const images = await Promise.all(
+      imgSrcs.map((element: string) => {
+        return this.imageService.create({ src: element });
       }),
     );
     // prettier-ignore
     const result = await this.productRepository.save({ 
-      seller, mainImage, subImages, ...productInfo 
+      seller, images, ...productInfo 
     });
     return result;
   }
 
-  async update() {}
+  async update({ productId, updateProductInput }) {
+    const product = await this.productRepository.findOne({
+      where: { id: productId },
+      relations: ['seller'],
+    });
+
+    const updatedProduct = {
+      ...product,
+      ...updateProductInput,
+    };
+
+    return await this.productRepository.save(updatedProduct);
+  }
 
   async findAll() {
     const products = await this.productRepository.find({
       // prettier-ignore
-      relations: ['mainImage', 'subImages', 'seller', 'transaction', 'likedUsers'],
+      relations: ['images', 'seller', 'transaction', 'comments'],
     });
     return products;
   }
@@ -48,7 +58,7 @@ export class ProductService {
     const product = await this.productRepository.findOne({
       where: { id: productId },
       // prettier-ignore
-      relations: ['mainImage', 'subImages', 'seller', 'transaction', 'likedUsers'],
+      relations: ['images', 'seller', 'transaction', 'comments'],
     });
     return product;
   }
@@ -58,20 +68,49 @@ export class ProductService {
     return result.affected ? true : false;
   }
 
-  // async dibs({ targetUser, productId }) {
-  //   const userFound = await this.userRepository.findOne({
-  //     where: { email: targetUser.email },
-  //   });
-  //   const productFound = await this.productRepository.findOne({
-  //     where: { id: productId },
-  //   });
-  //   let userArr = productFound.likedUsers;
-  //   if (!userArr) userArr = [];
-  //   userArr.push(userFound);
-  //   const updatedProduct = await this.productRepository.save({
-  //     ...productFound,
-  //     likedUsers: userArr,
-  //   });
-  //   return updatedProduct.likedUsers;
-  // }
+  async dibs({ targetUser, productId }) {
+    const userFound = await this.userRepository.findOne({
+      where: { email: targetUser.email },
+      relations: ['scheduledBoards', 'dibsProducts', 'dibsPosts'],
+    });
+
+    const productFound = await this.productRepository.findOne({
+      where: { id: productId },
+      // prettier-ignore
+      relations: [ 'images', 'seller', 'transaction', 'likedUsers'],
+    });
+
+    let userArr = productFound.likedUsers;
+    if (!userArr) userArr = [];
+    for (let i = 0; i < productFound.likedUsers.length; i++) {
+      const user = productFound.likedUsers[i];
+      if (user.id === userFound.id) return productFound.likedUsers;
+    }
+
+    userArr.push(userFound);
+    const updatedProduct = await this.productRepository.save({
+      ...productFound,
+      likedUsers: userArr,
+    });
+    return updatedProduct.likedUsers;
+  }
+
+  async cancelDibs({ targetUser, productId }) {
+    const productFound = await this.productRepository.findOne({
+      where: { id: productId },
+      // prettier-ignore
+      relations: [ 'images', 'seller', 'transaction', 'likedUsers'],
+    });
+    let userArr = productFound.likedUsers;
+
+    const updatedUserList = userArr.filter((element) => {
+      return element.email !== targetUser.email;
+    });
+
+    const updatedProduct = await this.productRepository.save({
+      ...productFound,
+      likedUsers: updatedUserList,
+    });
+    return updatedProduct.likedUsers;
+  }
 }

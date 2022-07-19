@@ -17,7 +17,6 @@ export class EventService {
     const result = await axios.get(
       `https://openapi.gg.go.kr/Ggculturevent?KEY=${KEY}&pIndex=1&pSize=10&Type=json`,
     );
-    console.log(JSON.stringify(result.data.Ggculturevent[1].row[0]));
     await Promise.all(
       result.data.Ggculturevent[1].row.map((element) => {
         return this.eventRepository.save({
@@ -30,5 +29,12 @@ export class EventService {
       }),
     );
     return JSON.stringify(result.data);
+  }
+
+  async findEvents({ searchWord }) {
+    const events = await this.eventRepository.find({
+      where: { name: searchWord },
+    });
+    return events;
   }
 }

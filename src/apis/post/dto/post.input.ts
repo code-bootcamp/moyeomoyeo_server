@@ -1,50 +1,27 @@
-import { Field, Int, ObjectType } from '@nestjs/graphql';
-import { Category } from 'src/apis/category/entities/category.entity';
-import { User } from 'src/apis/user/entities/user.entity';
-import {
-  Column,
-  CreateDateColumn,
-  Entity,
-  JoinTable,
-  ManyToMany,
-  ManyToOne,
-  PrimaryGeneratedColumn,
-  UpdateDateColumn,
-} from 'typeorm';
+import { Field, InputType } from '@nestjs/graphql';
+import { Entity } from 'typeorm';
 
 @Entity()
-@ObjectType()
+@InputType()
 export class PostInput {
-  @Column()
   @Field(() => String)
   title: string;
 
-  @ManyToOne(() => User)
-  @Field(() => User)
-  writer: User;
-
-  @Column()
   @Field(() => String)
-  fileSrc: string;
+  address: string;
 
-  @Column()
+  @Field(() => Date)
+  dateStart: Date;
+
+  @Field(() => Date)
+  dateEnd: Date;
+
   @Field(() => String)
-  headerImgSrc: string;
+  description: string;
 
-  @CreateDateColumn()
-  @Field(() => Date)
-  uploadedAt: Date;
+  @Field(() => [String])
+  imgSrcs: string[];
 
-  @UpdateDateColumn()
-  @Field(() => Date)
-  editedAt: Date;
-
-  @Column({ default: 0 })
-  @Field(() => Int)
-  viewCount: number;
-
-  @JoinTable()
-  @ManyToMany(() => Category, (categories) => categories.posts)
-  @Field(() => [Category])
-  categories: Category[];
+  @Field(() => String)
+  category: string;
 }

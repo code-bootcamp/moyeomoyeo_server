@@ -16,6 +16,12 @@ export class UserResolver {
     return this.userService.findUser({ email });
   }
 
+  @UseGuards(GqlAccessGuard)
+  @Query(() => User)
+  fetchLoginUser(@TargetUser() targetUser: any) {
+    return this.userService.findLoginUser({ targetUser });
+  }
+
   @Query(() => [User])
   fetchUsers() {
     return this.userService.findUsers();
@@ -29,6 +35,14 @@ export class UserResolver {
   @Mutation(() => Boolean)
   deleteUser(@Args('userId') userId: string) {
     return this.userService.delete({ userId });
+  }
+
+  @Mutation(() => Boolean)
+  resetPassword(
+    @Args('email') email: string,
+    @Args('newPassword') newPassword: string,
+  ) {
+    return this.userService.resetPassword({ email, newPassword });
   }
 
   @UseGuards(GqlAccessGuard)
