@@ -24,11 +24,14 @@ export class AuthService {
     const userFound = await this.userService.findUser({ email });
     // 해당 이메일로 가입된 사용자 없다면 오류
     if (!userFound)
-      throw new UnprocessableEntityException('등록되지 않은 사용자입니다.');
+      throw new UnprocessableEntityException(
+        'Error 422: 등록되지 않은 사용자입니다.',
+      );
 
     // 입력된 비밀번호와 가입시 입력받은 비밀번호 다르다면 오류
     const isAuth = await bcrypt.compare(password, userFound.password);
-    if (!isAuth) throw new UnauthorizedException('잘못된 비밀번호입니다.');
+    if (!isAuth)
+      throw new UnauthorizedException('Error 402: 잘못된 비밀번호입니다.');
 
     // 다 통과했다면 토큰 발급
     this.setRefreshToken({ userFound, res: context.res });

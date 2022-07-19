@@ -14,9 +14,6 @@ export class ProductInput {
   @Field(() => String)
   contentSrc: string;
 
-  @Field(() => String)
-  mainImgSrc: string;
-
   @Field(() => [String])
-  subImgSrcs: string[];
+  imgSrcs: string[];
 }

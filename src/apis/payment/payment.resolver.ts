@@ -14,9 +14,15 @@ export class PaymentResolver {
   createPayment(
     @Args('impUid') impUid: string,
     @Args('productId') productId: string,
+    @Args('address') address: string,
     @TargetUser('targetUser') targetUser: any,
   ) {
-    return this.paymentService.create({ impUid, productId, targetUser });
+    return this.paymentService.create({
+      impUid,
+      productId,
+      address,
+      targetUser,
+    });
   }
 
   @UseGuards(GqlAccessGuard)
@@ -24,8 +30,7 @@ export class PaymentResolver {
   cancelPayment(
     @Args('impUid') impUid: string,
     @Args('productId') productId: string,
-    @TargetUser('targetUser') targetUser: any,
   ) {
-    return this.paymentService.cancel({ impUid, productId, targetUser });
+    return this.paymentService.cancel({ impUid, productId });
   }
 }

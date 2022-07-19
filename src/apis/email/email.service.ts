@@ -1,13 +1,24 @@
-import { CACHE_MANAGER, Inject, Injectable } from '@nestjs/common';
+import {
+  CACHE_MANAGER,
+  Inject,
+  Injectable,
+  UnprocessableEntityException,
+} from '@nestjs/common';
 import { Cache } from 'cache-manager';
 import * as nodemailer from 'nodemailer';
 import 'dotenv/config';
+import { Repository } from 'typeorm';
+import { User } from '../user/entities/user.entity';
+import { InjectRepository } from '@nestjs/typeorm';
 
 @Injectable()
 export class EmailService {
   constructor(
     @Inject(CACHE_MANAGER)
     private readonly cacheManager: Cache,
+
+    @InjectRepository(User)
+    private readonly userRepository: Repository<User>,
   ) {}
 
   checkFormat({ email }) {
@@ -16,8 +27,12 @@ export class EmailService {
   }
 
   async sendEmail({ email }) {
-    // 발송 전에 이메일 주소 형식 확인
     if (!this.checkFormat({ email })) return '이메일 주소를 다시 확인해주세요.';
+    const userFound = await this.userRepository.findOne({ where: { email } });
+    if (!userFound)
+      throw new UnprocessableEntityException(
+        'Error 422: 등록된 사용자가 아닙니다. 회원가입을 먼저 진행해주세요',
+      );
     // 사용자 비밀번호 재설정 인증번호 생성
     const resetToken = String(Math.floor(Math.random() * 10 ** 6)).padStart(
       6,
@@ -53,6 +68,10 @@ export class EmailService {
 
   async authorizeReset({ email, tokenInput }) {
     const resetTokenSent = await this.cacheManager.get(email);
-    return resetTokenSent === tokenInput;
+    if (resetTokenSent === tokenInput) {
+      await this.userRepository.update({ email }, { isAuth: true });
+      return true;
+    }
+    return false;
   }
 }
