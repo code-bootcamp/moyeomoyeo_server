@@ -45,4 +45,7 @@ export class BoardResolver {
   deleteBoard(@Args('boardId') boardId: string) {
     return this.boardService.delete({ boardId });
   }
+
+  @Mutation(() => String)
+  requestAccompany() {}
 }

@@ -1,7 +1,7 @@
 import { Field, InputType, Int } from '@nestjs/graphql';
 import { BoardAddressInput } from 'src/apis/address/dto/Board.address.input';
 import { Event } from 'src/apis/event/entities/event.entity';
-import { Column, ManyToOne } from 'typeorm';
+import { Column, JoinColumn, ManyToOne, OneToOne } from 'typeorm';
 
 @InputType()
 export class CreateBoardInput {
@@ -20,10 +20,6 @@ export class CreateBoardInput {
   @Column({ default: 1 })
   @Field(() => Int)
   personCount: number;
-
-  @Column({ default: 1 })
-  @Field(() => Int)
-  personMax: number;
 
   @Column({ default: false })
   @Field(() => Boolean)
@@ -47,6 +43,6 @@ export class CreateBoardInput {
   @Field(() => String)
   coverImgSrc: string;
 
-  @Field(() => String)
-  parentEvent: string;
+  // @Field(() => String)
+  // parentEvent: Event;
 }
