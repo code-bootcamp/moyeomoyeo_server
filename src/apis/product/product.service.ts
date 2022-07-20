@@ -49,7 +49,8 @@ export class ProductService {
   async findAll() {
     const products = await this.productRepository.find({
       // prettier-ignore
-      relations: ['images', 'seller', 'transaction', 'comments'],
+      relations: ['images', 'seller', 'transaction',
+      'comments', 'comments.parent', 'comments.children'],
     });
     return products;
   }

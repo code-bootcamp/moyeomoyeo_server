@@ -13,6 +13,16 @@ export class CommentResolver {
     return this.commentService.fetchComments();
   }
 
+  @Query(() => [Comment])
+  fetchProductComments(@Args('productId') productId: string) {
+    return this.commentService.fetchProductComments({ productId });
+  }
+
+  @Query(() => [Comment])
+  fetchBoardComments(@Args('boardId') boardId: string) {
+    return this.commentService.fetchBoardComments({ boardId });
+  }
+
   @Query(() => Comment)
   fetchComment(@Args('commentId') commentId: string) {
     return this.commentService.fetchComment({ commentId });
@@ -23,7 +33,18 @@ export class CommentResolver {
     @Args('commentInput') commentInput: CommentInput,
     @Args('productId') productId: string,
   ) {
-    return this.commentService.create({ productId, commentInput });
+    return this.commentService.createProductComment({
+      productId,
+      commentInput,
+    });
+  }
+
+  @Mutation(() => Comment)
+  createBoardComment(
+    @Args('commentInput') commentInput: CommentInput,
+    @Args('boardId') boardId: string,
+  ) {
+    return this.commentService.createBoardComment({ boardId, commentInput });
   }
 
   @Mutation(() => Comment)
