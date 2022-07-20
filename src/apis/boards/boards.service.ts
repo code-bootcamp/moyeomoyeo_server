@@ -76,4 +76,6 @@ export class BoardService {
   async findOne({ boardId }) {
     return await this.boardRepository.findOne({ where: { id: boardId } });
   }
+
+  async request() {}
 }

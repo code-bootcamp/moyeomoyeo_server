@@ -44,15 +44,17 @@ export class Board {
   @Field(() => Boolean)
   isFull: boolean;
 
-  @Column(() => String)
-  startDate: Date;
+  @Column(() => Date)
+  @Field(() => Date)
+  dateStart: Date;
 
-  @Column(() => String)
-  endDate: Date;
+  @Column(() => Date)
+  @Field(() => Date)
+  dateEnd: Date;
 
-  @Column()
-  @Field(() => String)
-  transport: string;
+  @Column('simple-array')
+  @Field(() => [String])
+  transport: string[];
 
   @ManyToOne(() => User)
   @Field(() => User)
@@ -83,4 +85,9 @@ export class Board {
   @JoinColumn()
   @Field(() => Image)
   coverImage: Image;
+
+  // @Column()
+  // @Field(() => String)
+  // requestAccompany: string;
+  // 동행 요청 api
 }
