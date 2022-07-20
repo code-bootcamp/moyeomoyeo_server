@@ -1,5 +1,5 @@
 import { UseGuards } from '@nestjs/common';
-import { Args, Mutation, Resolver } from '@nestjs/graphql';
+import { Args, Query, Mutation, Resolver } from '@nestjs/graphql';
 import { GqlAccessGuard } from 'src/commons/auth/gql-auth.guard';
 import { TargetUser } from 'src/commons/auth/gql-user.param';
 import { Payment } from './entities/payment.entity';
@@ -32,5 +32,21 @@ export class PaymentResolver {
     @Args('productId') productId: string,
   ) {
     return this.paymentService.cancel({ impUid, productId });
+  }
+
+  @Query(() => Payment)
+  fetchPayment(@Args('paymentId') paymentId: string) {
+    return this.paymentService.fetch({ paymentId });
+  }
+
+  @Query(() => [Payment])
+  fetchPayments() {
+    return this.paymentService.fetchAll();
+  }
+
+  @UseGuards(GqlAccessGuard)
+  @Query(() => [Payment])
+  fetchLoginPayments(@TargetUser() targetUser: any) {
+    return this.paymentService.fetchLoginAll({ targetUser });
   }
 }

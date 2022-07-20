@@ -42,6 +42,7 @@ import { CommentModule } from './apis/comment/comment.module';
         origin: 'http://localhost:3000',
         credentials: 'include',
         exposedHeaders: ['Authorization', 'Set-Cookie', 'Cookie'],
+        methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS', 'HEAD'],
       },
     }),
     TypeOrmModule.forRoot({
@@ -52,7 +53,7 @@ import { CommentModule } from './apis/comment/comment.module';
       username: 'root',
       password: 'root',
       database: 'moyeo_server_local',
-      //database: 'moyeo_server',
+      //database: 'moyeo_database',
       entities: [__dirname + '/apis/**/*.entity.*'],
       synchronize: true,
       logging: true,
