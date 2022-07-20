@@ -4,6 +4,7 @@ import {
   InternalServerErrorException,
   UnprocessableEntityException,
 } from '@nestjs/common';
+import 'dotenv/config';
 
 @Injectable()
 export class IamportService {
@@ -14,9 +15,8 @@ export class IamportService {
       method: 'post',
       headers: { 'Content-Type': 'application/json' },
       data: {
-        imp_key: '2832529714891659',
-        imp_secret:
-          '1f4e729ba8c6494e2e994f0640ff41d3fa5bbac50977ab8c0085d45b56f33ec5e72a3a15a193ea35',
+        imp_key: process.env.IMP_CLIENT_KEY,
+        imp_secret: process.env.IMP_CLIENT_SECRET,
       },
     });
     return rsp.data.response.access_token;
@@ -24,12 +24,15 @@ export class IamportService {
 
   // Iamport API에서 해당 결제내역 불러오기 (발급 받은 토큰 사용)
   async getPaymentData({ access_token, impUid }) {
+    console.log(access_token);
+    console.log(impUid);
     try {
       const rsp = await axios({
         url: `https://api.iamport.kr/payments/${impUid}`,
         method: 'get',
         headers: { Authorization: access_token },
       });
+      console.log(rsp);
       return rsp.data.response;
     } catch (error) {
       throw new UnprocessableEntityException(

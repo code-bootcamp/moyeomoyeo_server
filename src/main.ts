@@ -9,6 +9,7 @@ async function bootstrap() {
     origin: 'http://localhost:3000',
     credentials: true,
     exposedHeaders: ['Authorization', 'Set-Cookie', 'Cookie'],
+    methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS', 'HEAD'],
   });
   app.use(graphqlUploadExpress());
   app.use(cookieParser());

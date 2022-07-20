@@ -26,10 +26,12 @@ export class PaymentService {
 
   async create({ impUid, productId, address, targetUser }) {
     const access_token = await this.iamportService.getToken();
+    console.log(access_token);
     const data = await this.iamportService.getPaymentData({
       access_token,
       impUid,
     });
+    console.log(data);
     const productFound = await this.productRepository.findOne({
       where: { id: productId },
     });
@@ -122,6 +124,29 @@ export class PaymentService {
     } finally {
       await queryRunner.release();
     }
+  }
+
+  async fetch({ paymentId }) {
+    const result = await this.paymentRepository.findOne({
+      where: { id: paymentId },
+    });
+    return result;
+  }
+
+  async fetchAll() {
+    const results = await this.paymentRepository.find();
+    return results;
+  }
+
+  async fetchLoginAll({ targetUser }) {
+    const payments = await this.paymentRepository.find({
+      relations: ['buyer'],
+    });
+
+    const userPayments = payments.filter((element) => {
+      return element.buyer.email === targetUser.email;
+    });
+    return userPayments;
   }
 
   async checkAmount({ data, price }) {
