@@ -12,6 +12,6 @@ export class FileResolver {
   uploadImages(
     @Args({ name: 'files', type: () => [GraphQLUpload] }) files: FileUpload[], //
   ) {
-    return this.fileService.uploadImages({ files });
+    return this.fileService.upload({ files });
   }
 }

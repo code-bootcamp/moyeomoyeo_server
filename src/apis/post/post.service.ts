@@ -26,7 +26,9 @@ export class PostService {
     });
 
     if (!user.institution)
-      throw new UnauthorizedException('관계자 계정으로 다시 시도해주세요.');
+      throw new UnauthorizedException(
+        'Error 401: 관계자 계정으로 다시 시도해주세요.',
+      );
 
     // 이미지 리스트 불러오기
     const images = await Promise.all(
@@ -64,10 +66,15 @@ export class PostService {
   }
 
   async findAll() {
-    return await this.postRepository.find();
+    return await this.postRepository.find({
+      relations: ['images', 'likedUsers'],
+    });
   }
   async findOne({ postId }) {
-    return await this.postRepository.findOne({ where: { id: postId } });
+    return await this.postRepository.findOne({
+      where: { id: postId },
+      relations: ['images', 'likedUsers'],
+    });
   }
 
   async dibs({ targetUser, postId }) {

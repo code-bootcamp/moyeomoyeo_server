@@ -1,7 +1,7 @@
 import { Field, Int, ObjectType } from '@nestjs/graphql';
+import { Accompany } from 'src/apis/accompany/entities/accompany.entity';
 import { BoardAddress } from 'src/apis/address/entities/Board.address.entity';
 import { Comment } from 'src/apis/comment/entities/comment.entity';
-import { Event } from 'src/apis/event/entities/event.entity';
 import { Image } from 'src/apis/image/entities/image.entity';
 import { Post } from 'src/apis/post/entities/post.entity';
 import { User } from 'src/apis/user/entities/user.entity';
@@ -32,8 +32,8 @@ export class Board {
   @Field(() => String)
   contents: string;
 
-  @Column()
-  @Field(() => Int)
+  @Column({ default: 0 })
+  @Field(() => Int, { defaultValue: 0 })
   viewCount: number;
 
   @Column({ default: 1 })
@@ -64,10 +64,6 @@ export class Board {
   @Field(() => Post)
   parentPost: Post;
 
-  @ManyToOne(() => Event)
-  @Field(() => Event)
-  parentEvent: Event;
-
   @ManyToMany(() => User, (scheduledUsers) => scheduledUsers.scheduledBoards)
   @Field(() => [User])
   scheduledUsers: User[];
@@ -83,11 +79,12 @@ export class Board {
   comments: Comment[];
 
   @JoinColumn()
+  @OneToOne(() => Image)
   @Field(() => Image)
   coverImage: Image;
 
-  // @Column()
-  // @Field(() => String)
-  // requestAccompany: string;
-  // 동행 요청 api
+  @JoinTable()
+  @OneToMany(() => Accompany, (accompany) => accompany.board)
+  @Field(() => [Accompany])
+  accompanyRequests: Accompany[];
 }

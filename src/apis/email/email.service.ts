@@ -6,7 +6,6 @@ import {
 } from '@nestjs/common';
 import { Cache } from 'cache-manager';
 import * as nodemailer from 'nodemailer';
-import 'dotenv/config';
 import { Repository } from 'typeorm';
 import { User } from '../user/entities/user.entity';
 import { InjectRepository } from '@nestjs/typeorm';

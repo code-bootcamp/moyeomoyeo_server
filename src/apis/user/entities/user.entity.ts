@@ -1,6 +1,5 @@
 import { Field, ObjectType } from '@nestjs/graphql';
-import { Board } from 'src/apis/boards/entities/board.entity';
-import { Event } from 'src/apis/event/entities/event.entity';
+import { Accompany } from 'src/apis/accompany/entities/accompany.entity';
 import { Post } from 'src/apis/post/entities/post.entity';
 import { Product } from 'src/apis/product/entities/product.entity';
 import {
@@ -10,6 +9,7 @@ import {
   Entity,
   JoinTable,
   ManyToMany,
+  OneToMany,
   PrimaryGeneratedColumn,
 } from 'typeorm';
 
@@ -37,7 +37,7 @@ export class User {
   phone: string;
 
   @CreateDateColumn()
-  @Field(() => String)
+  @Field(() => Date)
   createdAt: Date;
 
   @DeleteDateColumn()
@@ -65,9 +65,9 @@ export class User {
   manager: string;
 
   @JoinTable()
-  @ManyToMany(() => Board, (scheduledBoards) => scheduledBoards.scheduledUsers)
-  @Field(() => [Board], { nullable: true })
-  scheduledBoards: Board[];
+  @OneToMany(() => Accompany, (scheduledBoards) => scheduledBoards.reqUser)
+  @Field(() => [Accompany], { nullable: true })
+  scheduledBoards: Accompany[];
 
   @ManyToMany(() => Product, (dibsProducts) => dibsProducts.likedUsers)
   @Field(() => [Product], { nullable: true })
