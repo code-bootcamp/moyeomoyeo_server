@@ -6,7 +6,6 @@ import {
 } from '@nestjs/common';
 import { Cache } from 'cache-manager';
 import coolsms from 'coolsms-node-sdk';
-import 'dotenv/config';
 
 @Injectable()
 export class PhoneService {

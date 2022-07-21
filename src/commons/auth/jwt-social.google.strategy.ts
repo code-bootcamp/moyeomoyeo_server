@@ -1,6 +1,5 @@
 import { Strategy } from 'passport-google-oauth20';
 import { PassportStrategy } from '@nestjs/passport';
-import 'dotenv/config';
 
 export class JwtGoogleStrategy extends PassportStrategy(Strategy, 'google') {
   constructor() {
