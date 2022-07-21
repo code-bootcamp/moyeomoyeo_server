@@ -19,7 +19,13 @@ export class CommentService {
   async fetchComments() {
     const treeManager = this.manager.getTreeRepository(Comment);
     const comments = await treeManager.findTrees({
-      relations: ['parentProduct', 'parentBoard', 'children', 'parent'],
+      relations: [
+        'parentProduct',
+        'parentBoard',
+        'children',
+        'parent',
+        'writer',
+      ],
     });
     return comments;
 
@@ -51,7 +57,7 @@ export class CommentService {
     const treeManager = this.manager.getTreeRepository(Comment);
     const mainComment = await treeManager.findOne({
       where: { id: commentId },
-      relations: ['parentProduct', 'children', 'parent'],
+      relations: ['parentProduct', 'children', 'parent', 'writer'],
     });
     const comment = await treeManager.findDescendantsTree(mainComment);
     return comment;
@@ -73,7 +79,7 @@ export class CommentService {
       }
       const mainComment = await treeManager.findOne({
         where: { id: commentInput.parentId },
-        relations: ['parentProduct', 'children', 'parent'],
+        relations: ['parentProduct', 'children', 'parent', 'writer'],
       });
       const subComment = await treeManager.save({
         content: commentInput.content,
@@ -102,7 +108,7 @@ export class CommentService {
       }
       const mainComment = await treeManager.findOne({
         where: { id: commentInput.parentId },
-        relations: ['parentBoard', 'children', 'parent'],
+        relations: ['parentBoard', 'children', 'parent', 'writer'],
       });
       const subComment = await treeManager.save({
         content: commentInput.content,

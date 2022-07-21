@@ -17,12 +17,15 @@ import { ProductModule } from './apis/product/product.module';
 import { PaymentModule } from './apis/payment/payment.module';
 import { PostModule } from './apis/post/post.module';
 import { CommentModule } from './apis/comment/comment.module';
+import { AccompanyModule } from './apis/accompany/accompany.module';
+import { AddressModule } from './apis/address/address.module';
 
 @Module({
   imports: [
     EventModule,
     BoardModule,
     BoardAddress,
+    AddressModule,
     CommentModule,
     ProductModule,
     PaymentModule,
@@ -33,6 +36,7 @@ import { CommentModule } from './apis/comment/comment.module';
     PhoneModule,
     EmailModule,
     ImageModule,
+    AccompanyModule,
 
     GraphQLModule.forRoot<ApolloDriverConfig>({
       driver: ApolloDriver,
@@ -61,7 +65,7 @@ import { CommentModule } from './apis/comment/comment.module';
     CacheModule.register<RedisClientOptions>({
       store: redisStore,
       url: 'redis://redis:6379',
-      // url: 'redis://10.13.17.3:6379'
+      //url: 'redis://10.13.17.3:6379',
       isGlobal: true,
     }),
   ],

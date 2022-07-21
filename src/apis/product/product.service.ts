@@ -50,7 +50,7 @@ export class ProductService {
     const products = await this.productRepository.find({
       // prettier-ignore
       relations: ['images', 'seller', 'transaction',
-      'comments', 'comments.parent', 'comments.children'],
+      'comments', 'comments.parent', 'comments.children', 'likedUsers'],
     });
     return products;
   }
@@ -59,7 +59,7 @@ export class ProductService {
     const product = await this.productRepository.findOne({
       where: { id: productId },
       // prettier-ignore
-      relations: ['images', 'seller', 'transaction', 'comments'],
+      relations: ['images', 'seller', 'transaction', 'comments', 'likedUsers'],
     });
     return product;
   }

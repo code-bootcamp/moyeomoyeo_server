@@ -2,6 +2,7 @@ import { UseGuards } from '@nestjs/common';
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { GqlAccessGuard } from 'src/commons/auth/gql-auth.guard';
 import { TargetUser } from 'src/commons/auth/gql-user.param';
+import { Accompany } from '../accompany/entities/accompany.entity';
 import { BoardService } from './boards.service';
 import { CreateBoardInput } from './dto/createBoard.input';
 import { UpdateBoardInput } from './dto/updateBoard.input';
@@ -46,6 +47,17 @@ export class BoardResolver {
     return this.boardService.delete({ boardId });
   }
 
-  @Mutation(() => String)
-  requestAccompany() {}
+  @UseGuards(GqlAccessGuard)
+  @Mutation(() => Accompany)
+  requestAccompany(
+    @Args('boardId') boardId: string,
+    @TargetUser() targetUser: any,
+  ) {
+    return this.boardService.request({ boardId, targetUser });
+  }
+
+  @Query(() => [Accompany])
+  fetchBoardRequest(@Args('boardId') boardId: string) {
+    return this.boardService.fetchRequest({ boardId });
+  }
 }

@@ -23,8 +23,8 @@ export class Comment extends BaseEntity {
   @Field(() => String)
   id: string;
 
-  @CreateDateColumn() //type: "timestamp?"
-  @Field(() => String)
+  @CreateDateColumn()
+  @Field(() => Date)
   createdAt: Date;
 
   @DeleteDateColumn()
