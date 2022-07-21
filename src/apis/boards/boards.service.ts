@@ -1,6 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
+import { AccompanyService } from '../accompany/accompany.service';
+import { AddressService } from '../address/address.service';
 import { BoardAddress } from '../address/entities/Board.address.entity';
 import { ImageService } from '../image/image.service';
 import { User } from '../user/entities/user.entity';
@@ -13,11 +15,9 @@ export class BoardService {
     private readonly boardRepository: Repository<Board>,
     @InjectRepository(User)
     private readonly userRepository: Repository<User>,
-
-    @InjectRepository(BoardAddress)
-    private readonly boardAddress: Repository<BoardAddress>,
-
     private readonly imageService: ImageService,
+    private readonly accompanyService: AccompanyService,
+    private readonly addressService: AddressService,
   ) {}
 
   async update({ boardId, updateBoardInput }) {
@@ -35,30 +35,18 @@ export class BoardService {
   }
 
   async create({ payload, createBoardInput }) {
-    const { coverImgSrc, boardAddress, targetDate, ...input } =
-      createBoardInput;
+    const { coverImgSrc, boardAddress, ...input } = createBoardInput;
 
-    // 유저 찾기
-    const user = await this.userRepository.findOne({
-      where: { id: payload.id },
+    const userFound = await this.userRepository.findOne({
+      where: { email: payload.email },
     });
 
-    // 주소 생성
-    const addr = await this.boardAddress.save(boardAddress);
-
-    // 일시 생성
-    // const date = await this.boardDateRepository.save(targetDate);
-
-    // 커버 이미지 불러오기
+    const address = await this.addressService.createAddress({ boardAddress });
     const coverImage = await this.imageService.create({ src: coverImgSrc });
 
-    // 게시판 생성
+    // prettier-ignore
     const result = await this.boardRepository.save({
-      ...input,
-      boardAddress: addr,
-      // targetDate: date,
-      writer: user,
-      coverImage,
+      ...input, boardAddress: address, writer: userFound, coverImage,
     });
 
     return result;
@@ -77,5 +65,15 @@ export class BoardService {
     return await this.boardRepository.findOne({ where: { id: boardId } });
   }
 
-  async request() {}
+  async request({ boardId, targetUser }) {
+    return await this.accompanyService.createRequest({ boardId, targetUser });
+  }
+
+  async fetchRequest({ boardId }) {
+    const requests = await this.accompanyService.fetchAll();
+    const boardReqs = requests.filter((element) => {
+      return element.board.id === boardId;
+    });
+    return boardReqs;
+  }
 }

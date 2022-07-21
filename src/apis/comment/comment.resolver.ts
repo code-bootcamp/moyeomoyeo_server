@@ -47,7 +47,7 @@ export class CommentResolver {
     return this.commentService.createBoardComment({ boardId, commentInput });
   }
 
-  @Mutation(() => Comment)
+  @Mutation(() => Boolean)
   deleteComment(@Args('commentId') commentId: string) {
     return this.commentService.delete({ commentId });
   }

@@ -4,7 +4,6 @@ import {
   InternalServerErrorException,
   UnprocessableEntityException,
 } from '@nestjs/common';
-import 'dotenv/config';
 
 @Injectable()
 export class IamportService {
