@@ -3,7 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Board } from '../boards/entities/board.entity';
 import { User } from '../user/entities/user.entity';
-import { Accompany } from './entities/accompany.entity';
+import { Accompany, ACC_REQ_STATUS } from './entities/accompany.entity';
 
 @Injectable()
 export class AccompanyService {
@@ -35,5 +35,25 @@ export class AccompanyService {
       relations: ['board', 'reqUser'],
     });
     return requests;
+  }
+
+  async accept({ accompanyId }) {
+    const reqFound = await this.accompanyRepository.findOne({
+      where: { id: accompanyId },
+    });
+    return await this.accompanyRepository.save({
+      ...reqFound,
+      reqStatus: ACC_REQ_STATUS.ACCEPTED,
+    });
+  }
+
+  async refuse({ accompanyId }) {
+    const reqFound = await this.accompanyRepository.findOne({
+      where: { id: accompanyId },
+    });
+    return await this.accompanyRepository.save({
+      ...reqFound,
+      reqStatus: ACC_REQ_STATUS.REFUSED,
+    });
   }
 }

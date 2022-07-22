@@ -35,7 +35,8 @@ export class BoardService {
   }
 
   async create({ payload, createBoardInput }) {
-    const { coverImgSrc, boardAddress, ...input } = createBoardInput;
+    const { eventImageSrc, coverImgSrc, boardAddress, ...input } =
+      createBoardInput;
 
     const userFound = await this.userRepository.findOne({
       where: { email: payload.email },
@@ -43,10 +44,11 @@ export class BoardService {
 
     const address = await this.addressService.createAddress({ boardAddress });
     const coverImage = await this.imageService.create({ src: coverImgSrc });
+    const eventImage = await this.imageService.create({ src: eventImageSrc });
 
     // prettier-ignore
     const result = await this.boardRepository.save({
-      ...input, boardAddress: address, writer: userFound, coverImage,
+      ...input, eventImage, boardAddress: address, writer: userFound, coverImage,
     });
 
     return result;
@@ -58,11 +60,26 @@ export class BoardService {
   }
 
   async findAll() {
-    return await this.boardRepository.find();
+    // prettier-ignore
+    return await this.boardRepository.find({
+      relations: ['writer', 'eventImage', 'boardAddress', 'comments',
+      'coverImage', 'accompanyRequests']
+    });
   }
 
   async findOne({ boardId }) {
-    return await this.boardRepository.findOne({ where: { id: boardId } });
+    // prettier-ignore
+    const result = await this.boardRepository.findOne({
+      where: { id: boardId },
+      relations: ['writer', 'eventImage', 'boardAddress', 'comments',
+      'coverImage', 'accompanyRequests']
+    });
+    const prevCount = result.viewCount;
+    // prettier-ignore
+    await this.boardRepository.update(
+      { id: boardId }, { viewCount: prevCount + 1 }
+    )
+    return result;
   }
 
   async request({ boardId, targetUser }) {
