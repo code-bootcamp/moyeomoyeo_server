@@ -112,4 +112,11 @@ export class AuthService {
       `refreshToken=${refreshToken}; path=/; domain=http://34.64.202.27:3000/graphql; SameSite=None; Secure; httpOnly;`,
     );
   }
+
+  getAccessToken({ user }) {
+    return this.jwtService.sign(
+      { email: user.email, sub: user.id },
+      { secret: 'accessKey', expiresIn: '1h' },
+    );
+  }
 }
