@@ -18,8 +18,11 @@ export class ProductResolver {
   }
 
   @Query(() => [Product])
-  fetchProducts() {
-    return this.productService.findAll();
+  fetchProducts(
+    @Args('page', { nullable: true }) page: number,
+    @Args('pageSize', { nullable: true }) pageSize: number,
+  ) {
+    return this.productService.findAll({ page, pageSize });
   }
 
   @UseGuards(GqlAccessGuard)

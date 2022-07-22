@@ -3,7 +3,6 @@ import { Accompany } from 'src/apis/accompany/entities/accompany.entity';
 import { BoardAddress } from 'src/apis/address/entities/Board.address.entity';
 import { Comment } from 'src/apis/comment/entities/comment.entity';
 import { Image } from 'src/apis/image/entities/image.entity';
-import { Post } from 'src/apis/post/entities/post.entity';
 import { User } from 'src/apis/user/entities/user.entity';
 import {
   Column,
@@ -44,13 +43,13 @@ export class Board {
   @Field(() => Boolean)
   isFull: boolean;
 
-  @Column(() => Date)
-  @Field(() => Date)
-  dateStart: Date;
+  @Column()
+  @Field(() => String)
+  dateStart: String;
 
-  @Column(() => Date)
-  @Field(() => Date)
-  dateEnd: Date;
+  @Column()
+  @Field(() => String)
+  dateEnd: String;
 
   @Column('simple-array')
   @Field(() => [String])
@@ -60,9 +59,26 @@ export class Board {
   @Field(() => User)
   writer: User;
 
-  @ManyToOne(() => Post)
-  @Field(() => Post)
-  parentPost: Post;
+  @JoinColumn()
+  @OneToOne(() => Image)
+  @Field(() => Image)
+  eventImage: Image;
+
+  @Column()
+  @Field(() => String)
+  eventName: string;
+
+  @Column()
+  @Field(() => String)
+  eventStart: String;
+
+  @Column()
+  @Field(() => String)
+  eventEnd: String;
+
+  @Column()
+  @Field(() => String)
+  eventCategory: string;
 
   @ManyToMany(() => User, (scheduledUsers) => scheduledUsers.scheduledBoards)
   @Field(() => [User])

@@ -40,8 +40,11 @@ export class PaymentResolver {
   }
 
   @Query(() => [Payment])
-  fetchPayments() {
-    return this.paymentService.fetchAll();
+  fetchPayments(
+    @Args('page', { nullable: true }) page: number,
+    @Args('pageSize', { nullable: true }) pageSize: number,
+  ) {
+    return this.paymentService.fetchAll({ page, pageSize });
   }
 
   @UseGuards(GqlAccessGuard)

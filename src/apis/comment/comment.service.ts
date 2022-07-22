@@ -3,6 +3,7 @@ import { InjectEntityManager, InjectRepository } from '@nestjs/typeorm';
 import { EntityManager, Repository } from 'typeorm';
 import { Board } from '../boards/entities/board.entity';
 import { Product } from '../product/entities/product.entity';
+import { User } from '../user/entities/user.entity';
 import { Comment } from './entities/comment.entity';
 
 @Injectable()
@@ -14,6 +15,8 @@ export class CommentService {
     private readonly productRepository: Repository<Product>,
     @InjectRepository(Board)
     private readonly boardRepository: Repository<Board>,
+    @InjectRepository(User)
+    private readonly userRepository: Repository<User>,
   ) {}
 
   async fetchComments() {
@@ -63,18 +66,23 @@ export class CommentService {
     return comment;
   }
 
-  async createProductComment({ productId, commentInput }) {
+  async createProductComment({ productId, commentInput, targetUser }) {
     const treeManager = this.manager.getTreeRepository(Comment);
     const productFound = await this.productRepository.findOne({
       where: { id: productId },
       // prettier-ignore
       relations: ['images', 'seller', 'transaction', 'likedUsers', 'comments'],
     });
+    const userFound = await this.userRepository.findOne({
+      where: { email: targetUser.email },
+      relations: ['scheduledBoards', 'dibsProducts', 'dibsPosts'],
+    });
     try {
       if (!commentInput.parentId) {
         return await treeManager.save({
           content: commentInput.content,
           parentProduct: productFound,
+          writer: userFound,
         });
       }
       const mainComment = await treeManager.findOne({
@@ -85,6 +93,7 @@ export class CommentService {
         content: commentInput.content,
         parent: mainComment,
         parentProduct: productFound,
+        writer: userFound,
       });
       return subComment;
     } catch (error) {
@@ -92,18 +101,23 @@ export class CommentService {
     }
   }
 
-  async createBoardComment({ boardId, commentInput }) {
+  async createBoardComment({ boardId, commentInput, targetUser }) {
     const treeManager = this.manager.getTreeRepository(Comment);
     const boardFound = await this.boardRepository.findOne({
       where: { id: boardId },
       // prettier-ignore
       relations: ['writer', 'parentPost', 'parentEvent', 'scheduledUsers', 'boardAddress', 'comments' ],
     });
+    const userFound = await this.userRepository.findOne({
+      where: { email: targetUser.email },
+      relations: ['scheduledBoards', 'dibsProducts', 'dibsPosts'],
+    });
     try {
       if (!commentInput.parentId) {
         return await treeManager.save({
           content: commentInput.content,
           parentBoard: boardFound,
+          writer: userFound,
         });
       }
       const mainComment = await treeManager.findOne({
@@ -114,6 +128,7 @@ export class CommentService {
         content: commentInput.content,
         parent: mainComment,
         parentBoard: boardFound,
+        writer: userFound,
       });
       return subComment;
     } catch (error) {

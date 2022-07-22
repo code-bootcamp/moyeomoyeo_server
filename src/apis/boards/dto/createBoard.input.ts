@@ -14,10 +14,10 @@ export class CreateBoardInput {
   personCount: number;
 
   @Field(() => String)
-  dateStart: Date;
+  dateStart: String;
 
   @Field(() => String)
-  dateEnd: Date;
+  dateEnd: String;
 
   @Field(() => [String])
   transport: string[];
@@ -27,4 +27,20 @@ export class CreateBoardInput {
 
   @Field(() => String)
   coverImgSrc: string;
+
+  @Field(() => String)
+  eventImageSrc: string;
+
+  @Field(() => String)
+  eventName: string;
+
+  @Field(() => String)
+  eventStart: String;
+
+  @Field(() => String)
+  eventEnd: String;
+
+  @Column()
+  @Field(() => String)
+  eventCategory: string;
 }
