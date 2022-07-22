@@ -59,12 +59,18 @@ export class BoardService {
     return result.affected ? true : false;
   }
 
-  async findAll() {
+  async findAll({ page, pageSize }) {
     // prettier-ignore
-    return await this.boardRepository.find({
+    const boards = await this.boardRepository.find({
       relations: ['writer', 'eventImage', 'boardAddress', 'comments',
       'coverImage', 'accompanyRequests']
     });
+    if (!page || !pageSize) return boards;
+    const paginated = [];
+    for (let i = (page - 1) * pageSize; i < page * pageSize; i++) {
+      if (boards[i]) paginated.push(boards[i]);
+    }
+    return paginated;
   }
 
   async findOne({ boardId }) {

@@ -49,7 +49,11 @@ export class PaymentResolver {
 
   @UseGuards(GqlAccessGuard)
   @Query(() => [Payment])
-  fetchLoginPayments(@TargetUser() targetUser: any) {
-    return this.paymentService.fetchLoginAll({ targetUser });
+  fetchLoginPayments(
+    @TargetUser() targetUser: any,
+    @Args('page', { nullable: true }) page: number,
+    @Args('pageSize', { nullable: true }) pageSize: number,
+  ) {
+    return this.paymentService.fetchLoginAll({ targetUser, page, pageSize });
   }
 }
