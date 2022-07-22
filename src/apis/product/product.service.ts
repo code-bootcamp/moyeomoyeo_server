@@ -46,11 +46,20 @@ export class ProductService {
     return await this.productRepository.save(updatedProduct);
   }
 
-  async findAll() {
+  async findAll({ page, pageSize }) {
+    if (!page || !pageSize) {
+      return await this.productRepository.find({
+        // prettier-ignore
+        relations: ['images', 'seller', 'transaction',
+        'comments', 'comments.parent', 'comments.children', 'likedUsers'],
+      });
+    }
     const products = await this.productRepository.find({
       // prettier-ignore
       relations: ['images', 'seller', 'transaction',
       'comments', 'comments.parent', 'comments.children', 'likedUsers'],
+      skip: (page - 1) * pageSize,
+      take: pageSize,
     });
     return products;
   }

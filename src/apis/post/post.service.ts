@@ -65,9 +65,16 @@ export class PostService {
     return await this.postRepository.save(newpost);
   }
 
-  async findAll() {
+  async findAll({ page, pageSize }) {
+    if (!page || !pageSize) {
+      return await this.postRepository.find({
+        relations: ['images', 'likedUsers'],
+      });
+    }
     return await this.postRepository.find({
       relations: ['images', 'likedUsers'],
+      skip: (page - 1) * pageSize,
+      take: pageSize,
     });
   }
   async findOne({ postId }) {

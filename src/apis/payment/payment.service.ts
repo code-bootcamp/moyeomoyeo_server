@@ -129,12 +129,22 @@ export class PaymentService {
   async fetch({ paymentId }) {
     const result = await this.paymentRepository.findOne({
       where: { id: paymentId },
+      relations: ['buyer'],
     });
     return result;
   }
 
-  async fetchAll() {
-    const results = await this.paymentRepository.find();
+  async fetchAll({ page, pageSize }) {
+    if (!page || !pageSize) {
+      return await this.paymentRepository.find({
+        relations: ['buyer'],
+      });
+    }
+    const results = await this.paymentRepository.find({
+      relations: ['buyer'],
+      skip: (page - 1) * pageSize,
+      take: pageSize,
+    });
     return results;
   }
 

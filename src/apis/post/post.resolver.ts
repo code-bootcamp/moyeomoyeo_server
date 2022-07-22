@@ -15,8 +15,11 @@ export class PostResolver {
   ) {}
 
   @Query(() => [Post])
-  fetchPosts() {
-    return this.postService.findAll();
+  fetchPosts(
+    @Args('page', { nullable: true }) page: number,
+    @Args('pageSize', { nullable: true }) pageSize: number,
+  ) {
+    return this.postService.findAll({ page, pageSize });
   }
 
   @Query(() => Post)
