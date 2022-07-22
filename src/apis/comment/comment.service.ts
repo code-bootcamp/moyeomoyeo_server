@@ -40,20 +40,30 @@ export class CommentService {
     //   .getMany();
   }
 
-  async fetchProductComments({ productId }) {
+  async fetchProductComments({ productId, page, pageSize }) {
     const comments = await this.fetchComments();
     const productComments = comments.filter((element) => {
       return element.parentProduct.id === productId;
     });
-    return productComments;
+    if (!page || !pageSize) return productComments;
+    const paginated = [];
+    for (let i = (page - 1) * pageSize; i < page * pageSize; i++) {
+      if (productComments[i]) paginated.push(productComments[i]);
+    }
+    return paginated;
   }
 
-  async fetchBoardComments({ boardId }) {
+  async fetchBoardComments({ boardId, page, pageSize }) {
     const comments = await this.fetchComments();
     const boardComments = comments.filter((element) => {
       return element.parentBoard.id === boardId;
     });
-    return boardComments;
+    if (!page || !pageSize) return boardComments;
+    const paginated = [];
+    for (let i = (page - 1) * pageSize; i < page * pageSize; i++) {
+      if (boardComments[i]) paginated.push(boardComments[i]);
+    }
+    return paginated;
   }
 
   async fetchComment({ commentId }) {

@@ -16,8 +16,11 @@ export class BoardResolver {
 
   @UseGuards(GqlAccessGuard)
   @Query(() => [Board])
-  fetchBoards() {
-    return this.boardService.findAll();
+  fetchBoards(
+    @Args('page', { nullable: true }) page: number,
+    @Args('pageSize', { nullable: true }) pageSize: number,
+  ) {
+    return this.boardService.findAll({ page, pageSize });
   }
 
   @Query(() => Board)

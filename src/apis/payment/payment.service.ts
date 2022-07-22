@@ -148,7 +148,7 @@ export class PaymentService {
     return results;
   }
 
-  async fetchLoginAll({ targetUser }) {
+  async fetchLoginAll({ targetUser, page, pageSize }) {
     const payments = await this.paymentRepository.find({
       relations: ['buyer'],
     });
@@ -156,7 +156,13 @@ export class PaymentService {
     const userPayments = payments.filter((element) => {
       return element.buyer.email === targetUser.email;
     });
-    return userPayments;
+    if (!page || !pageSize) return userPayments;
+
+    const paginated = [];
+    for (let i = (page - 1) * pageSize; i < page * pageSize; i++) {
+      if (userPayments[i]) paginated.push(userPayments[i]);
+    }
+    return paginated;
   }
 
   async checkAmount({ data, price }) {
