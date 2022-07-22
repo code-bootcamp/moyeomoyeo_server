@@ -17,13 +17,25 @@ export class CommentResolver {
   }
 
   @Query(() => [Comment])
-  fetchProductComments(@Args('productId') productId: string) {
-    return this.commentService.fetchProductComments({ productId });
+  fetchProductComments(
+    @Args('productId', { nullable: true }) productId: string,
+    @Args('page', { nullable: true }) page: number,
+    @Args('pageSize') pageSize: number,
+  ) {
+    return this.commentService.fetchProductComments({
+      productId,
+      page,
+      pageSize,
+    });
   }
 
   @Query(() => [Comment])
-  fetchBoardComments(@Args('boardId') boardId: string) {
-    return this.commentService.fetchBoardComments({ boardId });
+  fetchBoardComments(
+    @Args('boardId') boardId: string,
+    @Args('page', { nullable: true }) page: number,
+    @Args('pageSize', { nullable: true }) pageSize: number,
+  ) {
+    return this.commentService.fetchBoardComments({ boardId, page, pageSize });
   }
 
   @Query(() => Comment)
