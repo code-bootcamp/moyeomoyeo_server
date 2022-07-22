@@ -71,10 +71,16 @@ export class PostService {
     });
   }
   async findOne({ postId }) {
-    return await this.postRepository.findOne({
+    const result = await this.postRepository.findOne({
       where: { id: postId },
       relations: ['images', 'likedUsers'],
     });
+    const prevCount = result.viewCount;
+    // prettier-ignore
+    await this.postRepository.update(
+      { id: postId }, { viewCount: prevCount + 1 }
+    )
+    return result;
   }
 
   async dibs({ targetUser, postId }) {

@@ -61,6 +61,11 @@ export class ProductService {
       // prettier-ignore
       relations: ['images', 'seller', 'transaction', 'comments', 'likedUsers'],
     });
+    const prevCount = product.viewCount;
+    // prettier-ignore
+    await this.productRepository.update(
+      { id: productId }, { viewCount: prevCount + 1 },
+    );
     return product;
   }
 
