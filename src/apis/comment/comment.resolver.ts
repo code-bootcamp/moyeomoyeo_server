@@ -1,5 +1,8 @@
+import { UseGuards } from '@nestjs/common';
 import { Args, Mutation, Query } from '@nestjs/graphql';
 import { Resolver } from '@nestjs/graphql';
+import { GqlAccessGuard } from 'src/commons/auth/gql-auth.guard';
+import { TargetUser } from 'src/commons/auth/gql-user.param';
 import { CommentService } from './comment.service';
 import { CommentInput } from './dto/comment.input';
 import { Comment } from './entities/comment.entity';
@@ -28,30 +31,41 @@ export class CommentResolver {
     return this.commentService.fetchComment({ commentId });
   }
 
+  @UseGuards(GqlAccessGuard)
   @Mutation(() => Comment)
   createProductComment(
     @Args('commentInput') commentInput: CommentInput,
     @Args('productId') productId: string,
+    @TargetUser() targetUser: any,
   ) {
     return this.commentService.createProductComment({
       productId,
       commentInput,
+      targetUser,
     });
   }
 
+  @UseGuards(GqlAccessGuard)
   @Mutation(() => Comment)
   createBoardComment(
     @Args('commentInput') commentInput: CommentInput,
     @Args('boardId') boardId: string,
+    @TargetUser() targetUser: any,
   ) {
-    return this.commentService.createBoardComment({ boardId, commentInput });
+    return this.commentService.createBoardComment({
+      boardId,
+      commentInput,
+      targetUser,
+    });
   }
 
+  @UseGuards(GqlAccessGuard)
   @Mutation(() => Boolean)
   deleteComment(@Args('commentId') commentId: string) {
     return this.commentService.delete({ commentId });
   }
 
+  @UseGuards(GqlAccessGuard)
   @Mutation(() => Boolean)
   deleteComments() {
     return this.commentService.deleteAll();

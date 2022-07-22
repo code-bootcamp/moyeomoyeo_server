@@ -1,6 +1,7 @@
-import { Args, Resolver } from '@nestjs/graphql';
+import { Args, Mutation, Resolver } from '@nestjs/graphql';
 import { TargetUser } from 'src/commons/auth/gql-user.param';
 import { AccompanyService } from './accompany.service';
+import { Accompany } from './entities/accompany.entity';
 
 @Resolver()
 export class AccompanyResolver {
@@ -11,5 +12,15 @@ export class AccompanyResolver {
     @TargetUser() targetUser: any,
   ) {
     return this.accompanyService.createRequest({ boardId, targetUser });
+  }
+
+  @Mutation(() => Accompany)
+  acceptAccompany(@Args('accompanyId') accompanyId: string) {
+    return this.accompanyService.accept({ accompanyId });
+  }
+
+  @Mutation(() => Accompany)
+  refuseAccompany(@Args('accompanyId') accompanyId: string) {
+    return this.accompanyService.refuse({ accompanyId });
   }
 }

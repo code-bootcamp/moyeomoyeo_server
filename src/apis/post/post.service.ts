@@ -65,16 +65,29 @@ export class PostService {
     return await this.postRepository.save(newpost);
   }
 
-  async findAll() {
+  async findAll({ page, pageSize }) {
+    if (!page || !pageSize) {
+      return await this.postRepository.find({
+        relations: ['images', 'likedUsers'],
+      });
+    }
     return await this.postRepository.find({
       relations: ['images', 'likedUsers'],
+      skip: (page - 1) * pageSize,
+      take: pageSize,
     });
   }
   async findOne({ postId }) {
-    return await this.postRepository.findOne({
+    const result = await this.postRepository.findOne({
       where: { id: postId },
       relations: ['images', 'likedUsers'],
     });
+    const prevCount = result.viewCount;
+    // prettier-ignore
+    await this.postRepository.update(
+      { id: postId }, { viewCount: prevCount + 1 }
+    )
+    return result;
   }
 
   async dibs({ targetUser, postId }) {
