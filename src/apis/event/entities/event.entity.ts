@@ -1,15 +1,6 @@
 import { Field, ObjectType } from '@nestjs/graphql';
-import { Board } from 'src/apis/boards/entities/board.entity';
-import { Post } from 'src/apis/post/entities/post.entity';
-import { User } from 'src/apis/user/entities/user.entity';
-import {
-  Column,
-  Entity,
-  JoinColumn,
-  ManyToMany,
-  OneToOne,
-  PrimaryGeneratedColumn,
-} from 'typeorm';
+
+import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity()
 @ObjectType()
@@ -22,11 +13,11 @@ export class Event {
   @Field(() => String)
   name: string;
 
-  @Column()
+  @Column({ nullable: true })
   @Field(() => String)
   description: string;
 
-  @Column()
+  @Column({ nullable: true })
   @Field(() => Date)
   date: Date;
 
@@ -38,8 +29,7 @@ export class Event {
   @Field(() => String)
   imgSrc: string;
 
-  @JoinColumn()
-  @OneToOne(() => Post)
-  @Field(() => Post)
-  post: Post;
+  @Column({ nullable: true })
+  @Field(() => String)
+  urlRedirect: string;
 }

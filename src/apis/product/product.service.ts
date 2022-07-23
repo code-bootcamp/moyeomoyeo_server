@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
+import { Image } from '../image/entities/image.entity';
 import { ImageService } from '../image/image.service';
 import { User } from '../user/entities/user.entity';
 import { Product } from './entities/product.entity';
@@ -33,17 +34,28 @@ export class ProductService {
   }
 
   async update({ productId, updateProductInput }) {
-    const product = await this.productRepository.findOne({
+    const { imgSrcs, ...updateInfo } = updateProductInput;
+    const productFound = await this.productRepository.findOne({
       where: { id: productId },
-      relations: ['seller'],
+      relations: ['seller', 'transaction', 'likedUsers', 'comments', 'images'],
     });
-
-    const updatedProduct = {
-      ...product,
-      ...updateProductInput,
-    };
-
-    return await this.productRepository.save(updatedProduct);
+    if (!imgSrcs) {
+      return await this.productRepository.save({
+        ...productFound,
+        ...updateInfo,
+      });
+    }
+    const newImgList = await Promise.all(
+      imgSrcs.map((element) => {
+        return this.imageService.create({ src: element });
+      }),
+    );
+    const updatedProduct = await this.productRepository.save({
+      ...productFound,
+      ...updateInfo,
+      images: newImgList,
+    });
+    return updatedProduct;
   }
 
   async findAll({ page, pageSize }) {

@@ -1,5 +1,6 @@
 import { Field, ObjectType } from '@nestjs/graphql';
 import { Accompany } from 'src/apis/accompany/entities/accompany.entity';
+import { Board } from 'src/apis/boards/entities/board.entity';
 import { Post } from 'src/apis/post/entities/post.entity';
 import { Product } from 'src/apis/product/entities/product.entity';
 import {
@@ -68,6 +69,10 @@ export class User {
   @OneToMany(() => Accompany, (scheduledBoards) => scheduledBoards.reqUser)
   @Field(() => [Accompany], { nullable: true })
   scheduledBoards: Accompany[];
+
+  @ManyToMany(() => Board, (confirmedBoards) => confirmedBoards.scheduledUsers)
+  @Field(() => [Board], { nullable: true })
+  confirmedBoards: Board[];
 
   @ManyToMany(() => Product, (dibsProducts) => dibsProducts.likedUsers)
   @Field(() => [Product], { nullable: true })

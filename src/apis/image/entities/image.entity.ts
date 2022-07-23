@@ -1,4 +1,5 @@
 import { Field, ObjectType } from '@nestjs/graphql';
+import { Post } from 'src/apis/post/entities/post.entity';
 import { Product } from 'src/apis/product/entities/product.entity';
 import {
   Column,
@@ -29,8 +30,11 @@ export class Image {
   @Field(() => Date)
   deletedAt: Date;
 
-  @JoinTable()
   @ManyToOne(() => Product, (product) => product.images)
   @Field(() => Product)
   product: Product;
+
+  @ManyToOne(() => Post, (post) => post.images)
+  @Field(() => Post)
+  post: Post;
 }

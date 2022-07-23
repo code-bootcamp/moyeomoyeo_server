@@ -14,7 +14,6 @@ export class BoardResolver {
     private readonly boardService: BoardService, //
   ) {}
 
-  @UseGuards(GqlAccessGuard)
   @Query(() => [Board])
   fetchBoards(
     @Args('page', { nullable: true }) page: number,
@@ -34,6 +33,12 @@ export class BoardResolver {
     @Args('updateBoardInput') updateBoardInput: UpdateBoardInput,
   ) {
     return await this.boardService.update({ boardId, updateBoardInput });
+  }
+
+  @UseGuards(GqlAccessGuard)
+  @Mutation(() => Board)
+  async makeBoardFull(@Args('boardId') boardId: string) {
+    return this.boardService.markAsFull({ boardId });
   }
 
   @UseGuards(GqlAccessGuard)
