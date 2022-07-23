@@ -1,11 +1,13 @@
 import { Field, InputType, Int } from '@nestjs/graphql';
 import { BoardAddressInput } from 'src/apis/address/dto/Board.address.input';
-import { Column, JoinColumn, ManyToOne, OneToOne } from 'typeorm';
 
 @InputType()
 export class CreateBoardInput {
   @Field(() => String)
   title: string;
+
+  @Field(() => String)
+  remark: string;
 
   @Field(() => String)
   contents: string;
@@ -14,10 +16,10 @@ export class CreateBoardInput {
   personCount: number;
 
   @Field(() => String)
-  dateStart: String;
+  dateStart: string;
 
   @Field(() => String)
-  dateEnd: String;
+  dateEnd: string;
 
   @Field(() => [String])
   transport: string[];
@@ -35,12 +37,14 @@ export class CreateBoardInput {
   eventName: string;
 
   @Field(() => String)
-  eventStart: String;
+  eventLocation: string;
 
   @Field(() => String)
-  eventEnd: String;
+  eventStart: string;
 
-  @Column()
+  @Field(() => String)
+  eventEnd: string;
+
   @Field(() => String)
   eventCategory: string;
 }
