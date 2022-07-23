@@ -7,8 +7,16 @@ export class EventResolver {
   constructor(private readonly eventService: EventService) {}
 
   @Query(() => String)
-  loadEvents() {
-    return this.eventService.loadEvents();
+  loadEvents(
+    @Args('pageIndex') pageIndex: string,
+    @Args('loadSize') loadSize: string,
+  ) {
+    return this.eventService.loadEvents({ pageIndex, loadSize });
+  }
+
+  @Query(() => [Event])
+  fetchEvents() {
+    return this.eventService.fetchEvents();
   }
 
   @Mutation(() => Event)

@@ -2,7 +2,6 @@ import {
   ConflictException,
   Injectable,
   UnauthorizedException,
-  UnprocessableEntityException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
@@ -34,7 +33,13 @@ export class UserService {
   async findLoginUser({ targetUser }) {
     const userFound = await this.userRepository.findOne({
       where: { email: targetUser.email },
-      relations: ['scheduledBoards', 'dibsProducts', 'dibsPosts'],
+      relations: [
+        'scheduledBoards',
+        'dibsProducts',
+        'dibsPosts',
+        'dibsProducts.images',
+        'dibsPosts.images',
+      ],
     });
     return userFound;
   }

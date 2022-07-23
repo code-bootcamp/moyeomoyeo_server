@@ -4,11 +4,13 @@ import { User } from 'src/apis/user/entities/user.entity';
 import {
   Column,
   CreateDateColumn,
+  DeleteDateColumn,
   Entity,
   JoinColumn,
   JoinTable,
   ManyToMany,
   ManyToOne,
+  OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
@@ -44,8 +46,9 @@ export class Post {
   @Field(() => Date)
   dateEnd: Date;
 
-  @ManyToOne(() => Image)
-  @Field(() => [Image])
+  @JoinTable()
+  @OneToMany(() => Image, (images) => images.post)
+  @Field(() => [Image], { nullable: true })
   images: Image[];
 
   @Column()
@@ -59,6 +62,10 @@ export class Post {
   @UpdateDateColumn()
   @Field(() => Date)
   editedAt: Date;
+
+  @DeleteDateColumn()
+  @Field(() => Date)
+  deletedAt: Date;
 
   @Column({ default: 0 })
   @Field(() => Int)

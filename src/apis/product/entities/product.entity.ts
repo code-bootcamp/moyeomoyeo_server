@@ -56,6 +56,7 @@ export class Product {
   @Field(() => Boolean)
   isSoldout: boolean;
 
+  @JoinTable()
   @OneToMany(() => Image, (images) => images.product)
   @Field(() => [Image], { nullable: true })
   images: Image[];

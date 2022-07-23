@@ -3,7 +3,6 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { AccompanyService } from '../accompany/accompany.service';
 import { AddressService } from '../address/address.service';
-import { BoardAddress } from '../address/entities/Board.address.entity';
 import { ImageService } from '../image/image.service';
 import { User } from '../user/entities/user.entity';
 import { Board } from './entities/board.entity';
@@ -21,8 +20,11 @@ export class BoardService {
   ) {}
 
   async update({ boardId, updateBoardInput }) {
+    // prettier-ignore
     const board = await this.boardRepository.findOne({
       where: { id: boardId },
+      relations: ['writer', 'eventImage', 'boardAddress', 'comments',
+      'coverImage', 'accompanyRequests', 'scheduledUsers']
     });
 
     const newboard = {
@@ -63,7 +65,7 @@ export class BoardService {
     // prettier-ignore
     const boards = await this.boardRepository.find({
       relations: ['writer', 'eventImage', 'boardAddress', 'comments',
-      'coverImage', 'accompanyRequests']
+      'coverImage', 'accompanyRequests', 'scheduledUsers']
     });
     if (!page || !pageSize) return boards;
     const paginated = [];
@@ -78,7 +80,7 @@ export class BoardService {
     const result = await this.boardRepository.findOne({
       where: { id: boardId },
       relations: ['writer', 'eventImage', 'boardAddress', 'comments',
-      'coverImage', 'accompanyRequests']
+      'coverImage', 'accompanyRequests', 'scheduledUsers']
     });
     const prevCount = result.viewCount;
     // prettier-ignore
@@ -98,5 +100,9 @@ export class BoardService {
       return element.board.id === boardId;
     });
     return boardReqs;
+  }
+
+  async markAsFull({ boardId }) {
+    return await this.boardRepository.update({ id: boardId }, { isFull: true });
   }
 }
