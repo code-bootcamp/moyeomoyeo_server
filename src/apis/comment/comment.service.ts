@@ -43,7 +43,7 @@ export class CommentService {
   async fetchProductComments({ productId, page, pageSize }) {
     const comments = await this.fetchComments();
     const productComments = comments.filter((element) => {
-      return element.parentProduct.id === productId;
+      if (element.parentProduct) return element.parentProduct.id === productId;
     });
     if (!page || !pageSize) return productComments;
     const paginated = [];
@@ -56,7 +56,7 @@ export class CommentService {
   async fetchBoardComments({ boardId, page, pageSize }) {
     const comments = await this.fetchComments();
     const boardComments = comments.filter((element) => {
-      return element.parentBoard.id === boardId;
+      if (element.parentBoard) return element.parentBoard.id === boardId;
     });
     if (!page || !pageSize) return boardComments;
     const paginated = [];
@@ -116,7 +116,8 @@ export class CommentService {
     const boardFound = await this.boardRepository.findOne({
       where: { id: boardId },
       // prettier-ignore
-      relations: ['writer', 'parentPost', 'parentEvent', 'scheduledUsers', 'boardAddress', 'comments' ],
+      relations: ['writer', 'scheduledUsers', 'boardAddress', 'comments',
+      'accompanyRequests', 'eventImage', 'coverImage' ],
     });
     const userFound = await this.userRepository.findOne({
       where: { email: targetUser.email },

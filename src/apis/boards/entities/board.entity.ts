@@ -6,6 +6,8 @@ import { Image } from 'src/apis/image/entities/image.entity';
 import { User } from 'src/apis/user/entities/user.entity';
 import {
   Column,
+  CreateDateColumn,
+  DeleteDateColumn,
   Entity,
   JoinColumn,
   JoinTable,
@@ -29,7 +31,19 @@ export class Board {
 
   @Column()
   @Field(() => String)
+  remark: string;
+
+  @Column()
+  @Field(() => String)
   contents: string;
+
+  @CreateDateColumn()
+  @Field(() => Date)
+  createdAt: Date;
+
+  @DeleteDateColumn()
+  @Field(() => Date)
+  deletedAt: Date;
 
   @Column({ default: 0 })
   @Field(() => Int, { defaultValue: 0 })
@@ -40,7 +54,7 @@ export class Board {
   personCount: number;
 
   @Column({ default: false })
-  @Field(() => Boolean)
+  @Field(() => Boolean, { defaultValue: false })
   isFull: boolean;
 
   @Column()
@@ -70,17 +84,22 @@ export class Board {
 
   @Column()
   @Field(() => String)
-  eventStart: String;
+  eventLocation: string;
 
   @Column()
   @Field(() => String)
-  eventEnd: String;
+  eventStart: string;
+
+  @Column()
+  @Field(() => String)
+  eventEnd: string;
 
   @Column()
   @Field(() => String)
   eventCategory: string;
 
-  @ManyToMany(() => User, (scheduledUsers) => scheduledUsers.scheduledBoards)
+  @JoinTable()
+  @ManyToMany(() => User, (scheduledUsers) => scheduledUsers.confirmedBoards)
   @Field(() => [User])
   scheduledUsers: User[];
 

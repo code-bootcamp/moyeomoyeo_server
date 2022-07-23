@@ -11,10 +11,10 @@ export class EventService {
     private readonly eventRepository: Repository<Event>,
   ) {}
 
-  async loadEvents() {
+  async loadEvents({ pageIndex, loadSize }) {
     const KEY = process.env.OPENAPI_CLIENT_KEY;
     const result = await axios.get(
-      `https://openapi.gg.go.kr/Ggculturevent?KEY=${KEY}&pIndex=1&pSize=10&Type=json`,
+      `https://openapi.gg.go.kr/Ggculturevent?KEY=${KEY}&pIndex=${pageIndex}&pSize=${loadSize}&Type=json`,
     );
     await Promise.all(
       result.data.Ggculturevent[1].row.map((element) => {
@@ -24,10 +24,16 @@ export class EventService {
           date: element.EVENT_PERD.split(' ')[0],
           areaCode: element.INST_NM,
           imgSrc: element.IMAGE_URL,
+          urlRedirect: element.SNTNC_URL,
         });
       }),
     );
     return JSON.stringify(result.data);
+  }
+
+  async fetchEvents() {
+    const results = await this.eventRepository.find();
+    return results;
   }
 
   async findEvents({ searchWord }) {

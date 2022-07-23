@@ -18,9 +18,9 @@ export class CommentResolver {
 
   @Query(() => [Comment])
   fetchProductComments(
-    @Args('productId', { nullable: true }) productId: string,
+    @Args('productId') productId: string,
     @Args('page', { nullable: true }) page: number,
-    @Args('pageSize') pageSize: number,
+    @Args('pageSize', { nullable: true }) pageSize: number,
   ) {
     return this.commentService.fetchProductComments({
       productId,

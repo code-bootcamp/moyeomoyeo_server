@@ -31,14 +31,14 @@ export class PostService {
       );
 
     // 이미지 리스트 불러오기
-    const images = await Promise.all(
+    const imagesList = await Promise.all(
       imgSrcs.map((element) => {
         return this.imageService.create({ src: element });
       }),
     );
 
     const result = await this.postRepository.save({
-      images,
+      images: imagesList,
       writer: user,
       ...postInfo,
     });
@@ -52,17 +52,28 @@ export class PostService {
   }
 
   async update({ postId, updatePostInput }) {
-    const post = await this.postRepository.findOne({
+    const { imgSrcs, ...updateInfo } = updatePostInput;
+    const postFound = await this.postRepository.findOne({
       where: { id: postId },
+      relations: ['writer', 'images', 'likedUsers'],
     });
-
-    const newpost = {
-      ...post,
-      id: postId,
-      ...updatePostInput,
-    };
-
-    return await this.postRepository.save(newpost);
+    if (!imgSrcs) {
+      return await this.postRepository.save({
+        ...postFound,
+        ...updateInfo,
+      });
+    }
+    const newImgList = await Promise.all(
+      imgSrcs.map((element) => {
+        return this.imageService.create({ src: element });
+      }),
+    );
+    const updatedPost = await this.postRepository.save({
+      ...postFound,
+      ...updateInfo,
+      images: newImgList,
+    });
+    return updatedPost;
   }
 
   async findAll({ page, pageSize }) {
