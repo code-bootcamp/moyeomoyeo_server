@@ -106,10 +106,10 @@ export class AuthService {
     );
     //res.cookie('refreshToken', refreshToken);
     // 배포환경
-    res.setHeader('Access-Control-Allow-Origin', 'http://localhost:3000');
+    res.setHeader('Access-Control-Allow-Origin', 'http://34.64.202.27:3000');
     res.setHeader(
       'Set-Cookie',
-      `refreshToken=${refreshToken}; path=/; domain=http://34.64.202.27:3000/graphql; SameSite=None; Secure; httpOnly;`,
+      `refreshToken=${refreshToken}; path=/; SameSite=None; Secure; httpOnly;`,
     );
   }
 
