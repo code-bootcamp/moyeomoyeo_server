@@ -80,14 +80,55 @@ export class AuthService {
   }
 
   setRefreshToken({ userFound: user, res }) {
-    const refreshToken = this.jwtService.sign(
-      { email: user.email, sub: user.id },
-      { secret: 'refreshKey', expiresIn: '2w' },
-    );
-    res.setHeader(
-      'Set-Cookie',
-      `refreshToken=${refreshToken}; path=/; domain=.momoyeo.site; SameSite=None; Secure; httpOnly`,
-    );
+    try {
+      const refreshToken = this.jwtService.sign(
+        { email: user.email, sub: user.id },
+        { secret: 'refreshKey', expiresIn: '2w' },
+      );
+      // 배포환경
+      // res.setHeader(
+      //   'Access-Control-Allow-Origin',
+      //   'http://localhost:3000/graphql',
+      // );
+      // res.setHeader(
+      //   'Set-Cookie',
+      //   `refreshToken=${refreshToken}; path=/; SameSite=None; Secure; httpOnly;`,
+      // );
+      ///////////////////////
+      // res.setHeader('Access-Control-Allow-Origin', 'http://localhost:3000');
+      // res.setHeader('Access-Control-Allow-Credentials', 'true');
+      // res.setHeader('Access-Control-Allow-Methods', 'GET,HEAD,OPTIONS,POST,PUT');
+      // res.setHeader(
+      //   'Access-Control-Allow-Headers',
+      //   'Access-Control-Allow-Headers, Origin,Accept, X-Requested-With, Content-Type, Access-Control-Request-Method, Access-Control-Request-Headers',
+      // );
+      // res.setHeader(
+      //   'Set-Cookie',
+      //   `refreshToken=${refreshToken}; path=/; domain=http://localhost:3000 SameSite=None; Secure; httpOnly;`,
+      // );
+      res.setHeader('Access-Control-Allow-Origin', 'http://localhost:3000');
+      res.setHeader('Access-Control-Allow-Credentials', 'true');
+      res.setHeader(
+        'Access-Control-Allow-Methods',
+        'GET,HEAD,OPTIONS,POST,PUT',
+      );
+      res.setHeader(
+        'Access-Control-Allow-Headers',
+        'Access-Control-Allow-Headers, Origin,Accept, X-Requested-With, Content-Type, Access-Control-Request-Method, Access-Control-Request-Headers',
+      );
+
+      res.cookie('refreshToken', refreshToken, {
+        path: '/',
+        domain: '.여기에 우리 백엔드 배포 주소', //ex) domain: '.shaki-server.shop',
+        httpOnly: true,
+        secure: true,
+        sameSite: 'none',
+      });
+
+      return true;
+    } catch {
+      return false;
+    }
   }
 
   getAccessToken({ user }) {
