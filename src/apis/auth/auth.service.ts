@@ -153,7 +153,7 @@ export class AuthService {
 
   getAccessToken({ user }) {
     return this.jwtService.sign(
-      { email: user.email, sub: user.id },
+      { email: user.email, id: user.id },
       { secret: 'accessKey', expiresIn: '1h' },
     );
   }
