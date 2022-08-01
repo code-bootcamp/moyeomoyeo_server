@@ -79,7 +79,7 @@ export class PostService {
   async findAll({ page, pageSize }) {
     if (!page || !pageSize) {
       return await this.postRepository.find({
-        relations: ['images', 'likedUsers'],
+        relations: ['images', 'likedUsers', 'writer'],
       });
     }
     return await this.postRepository.find({

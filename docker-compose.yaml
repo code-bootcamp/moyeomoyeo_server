@@ -3,7 +3,7 @@ version: '3.7'
 services:
   server:
     platform: linux/x86_64
-    image: asia.gcr.io/aerial-studio-357602/server-service:1.2
+    image: asia.gcr.io/aerial-studio-357602/server-service:1.5
     build:
       context: .
       dockerfile: Dockerfile

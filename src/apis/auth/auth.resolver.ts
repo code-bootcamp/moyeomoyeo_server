@@ -4,7 +4,10 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { Args, Context, Mutation, Resolver } from '@nestjs/graphql';
-import { GqlAccessGuard } from 'src/commons/auth/gql-auth.guard';
+import {
+  GqlAccessGuard,
+  GqlRefreshGuard,
+} from 'src/commons/auth/gql-auth.guard';
 import { TargetUser } from 'src/commons/auth/gql-user.param';
 import { AuthService } from './auth.service';
 import * as bcrypt from 'bcrypt';
@@ -38,7 +41,7 @@ export class AuthResolver {
     return this.authService.logout({ context });
   }
 
-  @UseGuards(GqlAccessGuard)
+  @UseGuards(GqlRefreshGuard)
   @Mutation(() => String)
   restoreAccessToken(
     @TargetUser() targetUser: any, //

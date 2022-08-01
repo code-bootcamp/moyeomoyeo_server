@@ -119,7 +119,7 @@ export class AuthService {
 
       res.cookie('refreshToken', refreshToken, {
         path: '/',
-        domain: '.여기에 우리 백엔드 배포 주소', //ex) domain: '.shaki-server.shop',
+        domain: '.momoyeo.site', //ex) domain: '.shaki-server.shop',
         httpOnly: true,
         secure: true,
         sameSite: 'none',
