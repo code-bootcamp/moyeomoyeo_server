@@ -32,7 +32,7 @@ export class Product {
   @Field(() => String)
   description: string;
 
-  @Column()
+  @Column({ type: 'longtext' })
   @Field(() => String)
   contentSrc: string;
 

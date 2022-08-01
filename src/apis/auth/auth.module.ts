@@ -17,6 +17,7 @@ import { JwtNaverStrategy } from 'src/commons/auth/jwt-social.naver.strategy';
     AuthResolver,
     AuthService,
     UserService,
+    JwtRefreshStrategy,
     JwtGoogleStrategy,
     JwtKakaoStrategy,
     JwtNaverStrategy,
