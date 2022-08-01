@@ -34,7 +34,7 @@ export class Post {
   @Field(() => String)
   address: string;
 
-  @Column()
+  @Column({ type: 'longtext' })
   @Field(() => String)
   description: string;
 
