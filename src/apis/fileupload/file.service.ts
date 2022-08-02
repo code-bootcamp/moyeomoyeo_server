@@ -15,7 +15,7 @@ export class FileService {
 
     const storage = new Storage({
       projectId: GCP_STORAGE_ID,
-      keyFilename: './key/gcp-file-storage.json',
+      keyFilename: '/my-secret/gcp-file-storage.json',
     }).bucket(GCP_BUCKET_ID);
 
     const urls = await Promise.all(

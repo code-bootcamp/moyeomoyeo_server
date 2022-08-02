@@ -3,6 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { AccompanyService } from '../accompany/accompany.service';
 import { AddressService } from '../address/address.service';
+import { BoardAddress } from '../address/entities/Board.address.entity';
 import { ImageService } from '../image/image.service';
 import { User } from '../user/entities/user.entity';
 import { Board } from './entities/board.entity';
@@ -17,23 +18,34 @@ export class BoardService {
     private readonly imageService: ImageService,
     private readonly accompanyService: AccompanyService,
     private readonly addressService: AddressService,
+    @InjectRepository(BoardAddress)
+    private readonly addressRepository: Repository<BoardAddress>,
   ) {}
 
   async update({ boardId, updateBoardInput }) {
     // prettier-ignore
-    const board = await this.boardRepository.findOne({
+    const boardFound = await this.boardRepository.findOne({
       where: { id: boardId },
       relations: ['writer', 'eventImage', 'boardAddress', 'comments',
       'coverImage', 'accompanyRequests', 'scheduledUsers']
     });
+    const { boardAddress, ...updateInfo } = updateBoardInput;
+    const { address_description, ...rest } = boardAddress;
+    const addressFound = await this.addressRepository.findOne({
+      where: { id: boardFound.boardAddress.id },
+    });
 
-    const newboard = {
-      ...board,
-      id: boardId,
-      ...updateBoardInput,
-    };
+    const newAddress = await this.addressRepository.save({
+      ...addressFound,
+      address_description,
+    });
 
-    return await this.boardRepository.save(newboard);
+    const updatedBoard = await this.boardRepository.save({
+      ...boardFound,
+      boardAddress: newAddress,
+    });
+
+    return updatedBoard;
   }
 
   async create({ payload, createBoardInput }) {
@@ -103,6 +115,13 @@ export class BoardService {
   }
 
   async markAsFull({ boardId }) {
-    return await this.boardRepository.update({ id: boardId }, { isFull: true });
+    await this.boardRepository.update({ id: boardId }, { isFull: true });
+    // prettier-ignore
+    const result = await this.boardRepository.findOne({
+      where: { id: boardId },
+      relations: ['writer', 'eventImage', 'boardAddress', 'comments',
+      'coverImage', 'accompanyRequests', 'scheduledUsers']
+    });
+    return result;
   }
 }

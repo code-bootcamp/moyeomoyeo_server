@@ -19,8 +19,10 @@ import { PostModule } from './apis/post/post.module';
 import { CommentModule } from './apis/comment/comment.module';
 import { AccompanyModule } from './apis/accompany/accompany.module';
 import { AddressModule } from './apis/address/address.module';
+import { AppController } from './app.controller';
 
 @Module({
+  controllers: [AppController],
   imports: [
     EventModule,
     BoardModule,
@@ -43,29 +45,38 @@ import { AddressModule } from './apis/address/address.module';
       autoSchemaFile: 'src/commons/graphql/schema.gql',
       context: ({ req, res }) => ({ req, res }),
       cors: {
-        origin: 'http://localhost:3000',
+        origin: [
+          'http://localhost:3000',
+          'https://momoyeo.site',
+          'https://moyeomoyeo.site',
+        ],
         credentials: 'include',
-        exposedHeaders: ['Authorization', 'Set-Cookie', 'Cookie'],
+        exposedHeaders: [
+          'Authorization',
+          'Set-Cookie',
+          'Cookie',
+          'Content-Type',
+        ],
         methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS', 'HEAD'],
       },
     }),
     TypeOrmModule.forRoot({
       type: 'mysql',
-      host: 'my-database',
-      // host: '10.13.16.3',
+      //host: 'my-database',
+      host: '10.94.81.3',
       port: 3306,
       username: 'root',
       password: 'root',
-      database: 'moyeo_server',
-      // database: 'moyeo_database',
+      //database: 'moyeo_server_updated',
+      database: 'moyeo_database',
       entities: [__dirname + '/apis/**/*.entity.*'],
       synchronize: true,
       logging: true,
     }),
     CacheModule.register<RedisClientOptions>({
       store: redisStore,
-      url: 'redis://redis:6379',
-      // url: 'redis://10.13.17.3:6379',
+      //url: 'redis://redis:6379',
+      url: 'redis://10.94.80.3:6379',
       isGlobal: true,
     }),
   ],
