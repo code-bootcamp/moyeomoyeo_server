@@ -106,7 +106,12 @@ export class AuthService {
       //   'Set-Cookie',
       //   `refreshToken=${refreshToken}; path=/; domain=http://localhost:3000 SameSite=None; Secure; httpOnly;`,
       // );
-      res.setHeader('Access-Control-Allow-Origin', 'http://localhost:3000');
+      res.setHeader('Access-Control-Allow-Origin', [
+        'http://localhost:3000',
+        'https://moyeomoyeo.site',
+        'http://moyeomoyeo.site',
+        'https://momoyeo.site',
+      ]);
       res.setHeader('Access-Control-Allow-Credentials', 'true');
       res.setHeader(
         'Access-Control-Allow-Methods',
@@ -119,7 +124,7 @@ export class AuthService {
 
       res.cookie('refreshToken', refreshToken, {
         path: '/',
-        domain: '.momoyeo.site', //ex) domain: '.shaki-server.shop',
+        domain: ['.momoyeo.site', '.moyeomoyeo.site'], //ex) domain: '.shaki-server.shop',
         httpOnly: true,
         secure: true,
         sameSite: 'none',
