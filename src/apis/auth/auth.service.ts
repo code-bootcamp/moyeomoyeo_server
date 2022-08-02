@@ -20,26 +20,6 @@ export class AuthService {
     private readonly cacheManager: Cache,
   ) {}
 
-  async login({ email, password, context }) {
-    const userFound = await this.userService.findUser({ email });
-    // 해당 이메일로 가입된 사용자 없다면 오류
-    if (!userFound)
-      throw new UnprocessableEntityException(
-        'Error 422: 등록되지 않은 사용자입니다.',
-      );
-
-    // 입력된 비밀번호와 가입시 입력받은 비밀번호 다르다면 오류
-    const isAuth = await bcrypt.compare(password, userFound.password);
-    if (!isAuth)
-      throw new UnauthorizedException('Error 402: 잘못된 비밀번호입니다.');
-
-    // 다 통과했다면 토큰 발급
-    this.setRefreshToken({ userFound, res: context.res });
-    const accessToken = this.generateToken({ userFound });
-
-    return accessToken;
-  }
-
   async loginSocial({ req, res }) {
     let userFound = await this.userService.findUser({ email: req.user.email });
     if (!userFound) {
@@ -126,7 +106,12 @@ export class AuthService {
       //   'Set-Cookie',
       //   `refreshToken=${refreshToken}; path=/; domain=http://localhost:3000 SameSite=None; Secure; httpOnly;`,
       // );
-      res.setHeader('Access-Control-Allow-Origin', 'http://localhost:3000');
+      res.setHeader('Access-Control-Allow-Origin', [
+        'http://localhost:3000',
+        'https://moyeomoyeo.site',
+        'http://moyeomoyeo.site',
+        'https://momoyeo.site',
+      ]);
       res.setHeader('Access-Control-Allow-Credentials', 'true');
       res.setHeader(
         'Access-Control-Allow-Methods',
@@ -139,7 +124,7 @@ export class AuthService {
 
       res.cookie('refreshToken', refreshToken, {
         path: '/',
-        domain: '.여기에 우리 백엔드 배포 주소', //ex) domain: '.shaki-server.shop',
+        domain: ['.momoyeo.site', '.moyeomoyeo.site'], //ex) domain: '.shaki-server.shop',
         httpOnly: true,
         secure: true,
         sameSite: 'none',

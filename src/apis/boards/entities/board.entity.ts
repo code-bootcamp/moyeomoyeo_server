@@ -33,7 +33,7 @@ export class Board {
   @Field(() => String)
   remark: string;
 
-  @Column()
+  @Column({ type: 'longtext' })
   @Field(() => String)
   contents: string;
 

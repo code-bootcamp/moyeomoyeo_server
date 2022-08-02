@@ -79,11 +79,11 @@ export class PostService {
   async findAll({ page, pageSize }) {
     if (!page || !pageSize) {
       return await this.postRepository.find({
-        relations: ['images', 'likedUsers'],
+        relations: ['images', 'likedUsers', 'writer'],
       });
     }
     return await this.postRepository.find({
-      relations: ['images', 'likedUsers'],
+      relations: ['images', 'likedUsers', 'writer'],
       skip: (page - 1) * pageSize,
       take: pageSize,
     });
@@ -91,7 +91,7 @@ export class PostService {
   async findOne({ postId }) {
     const result = await this.postRepository.findOne({
       where: { id: postId },
-      relations: ['images', 'likedUsers'],
+      relations: ['images', 'likedUsers', 'writer'],
     });
     const prevCount = result.viewCount;
     // prettier-ignore

@@ -8,19 +8,19 @@ export class BoardAddress {
   @Field(() => String)
   id: string;
 
-  @Column()
-  @Field(() => Float)
+  @Column({ type: 'decimal', precision: 8, scale: 5 })
+  @Field(() => Float, { nullable: true })
   lat: number;
 
-  @Column()
-  @Field(() => Float)
+  @Column({ type: 'decimal', precision: 8, scale: 5 })
+  @Field(() => Float, { nullable: true })
   lng: number;
 
   @Column()
-  @Field(() => String)
+  @Field(() => String, { nullable: true })
   postal: string;
 
   @Column()
-  @Field(() => String)
+  @Field(() => String, { nullable: true })
   address_description: string;
 }
