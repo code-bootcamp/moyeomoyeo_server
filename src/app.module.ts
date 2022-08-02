@@ -45,7 +45,11 @@ import { AppController } from './app.controller';
       autoSchemaFile: 'src/commons/graphql/schema.gql',
       context: ({ req, res }) => ({ req, res }),
       cors: {
-        origin: ['http://localhost:3000', 'https://momoyeo.site'],
+        origin: [
+          'http://localhost:3000',
+          'https://momoyeo.site',
+          'https://moyeomoyeo.site',
+        ],
         credentials: 'include',
         exposedHeaders: [
           'Authorization',
